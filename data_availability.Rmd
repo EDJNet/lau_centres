@@ -1,0 +1,177 @@
+---
+title: "Data availability"
+description: |
+  Data availability depends on sources
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library("dplyr", warn.conflicts = FALSE)
+
+library("tidyverse", quietly = TRUE)
+library("sf", quietly = TRUE)
+library("latlon2map")
+library("RSQLite") # for caching
+options(timeout = 60000)
+
+cache_folder <- fs::path(fs::path_home_r(),
+                         "R",
+                         "ll_data")
+
+fs::dir_create(cache_folder)
+
+ll_set_folder(path = cache_folder)
+
+## set db
+db <- DBI::dbConnect(
+  drv = RSQLite::SQLite(),
+  fs::path(cache_folder, "pop_weighted_centre.sqlite")
+)
+
+source("functions.R")
+```
+
+
+
+This page summarises coverage of LAU, NUTS, and population grid datasets at different points in time.
+
+
+
+
+## LAU coverage by year
+
+
+[See source](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat) for more details.
+
+https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/lau
+
+```{r lau data availability}
+available_lau_years <- 2011:2020
+
+lau_available <- purrr::map_dfr(.x = available_lau_years,
+               .f = function(x) {
+  get_lau_countries(x, db) %>% 
+                   dplyr::mutate(year = x)
+})
+lau_available %>% dplyr::group_by(year) %>% count() %>% knitr::kable()
+```
+
+
+```{r}
+lau_available %>%
+  dplyr::group_by(year) %>%
+  dplyr::arrange(country) %>% 
+  summarise(country = stringr::str_c(country, collapse = ", ")) %>% knitr::kable()
+```
+
+For LAU, the most recent dataset is apparently not the one with the widest coverage. Largest coverage may be obtained by using older LAU when the most recent are not available for relevant countries. 
+
+Keep in mind that the apparent coverage may not fully correspond with the actual coverage, e.g. because data for some or all LAUs in a given country may still be missing or have incomplete data (see in particular data for Montenegro, Kosovo, or the coding of French overseas territories).
+
+
+```{r}
+latest_lau_countries <- lau_available %>% 
+  dplyr::slice_max(year) %>% 
+  dplyr::pull(country)
+
+all_lau_countries <- lau_available %>% 
+#  dplyr::filter(year!= max (year)) %>% 
+  dplyr::pull(country) %>% 
+  unique()
+
+all_lau_countries[!is.element(all_lau_countries, latest_lau_countries)]
+```
+
+
+
+
+## Population grid coverage by year
+
+[See source](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat) for more details.
+
+
+```{r population grid data availability}
+available_pop_grid_years <- c(2006, 2011, 2018)
+
+pop_grid_available <- purrr::map_dfr(.x = available_pop_grid_years,
+               .f = function(x) {
+  get_pop_grid_countries(x, db) %>% 
+                   dplyr::mutate(year = x)
+})
+pop_grid_available %>% dplyr::group_by(year) %>% count() %>% knitr::kable()
+
+```
+
+
+
+
+
+```{r}
+pop_grid_available %>%
+  dplyr::group_by(year) %>%
+  dplyr::arrange(country) %>% 
+  summarise(country = stringr::str_c(country, collapse = ", ")) %>%
+  knitr::kable()
+```
+
+
+
+
+```{r get base data for each source dataset, eval=FALSE}
+pop_grid_countries <- get_pop_grid_countries(pop_grid_year, db)
+lau_countries <- get_lau_countries(lau_year, db)
+gisco_id_df <- get_gisco_id(lau_year, db)
+```
+
+
+## How many countries are present in both the LAU and population grid dataset?
+
+
+
+```{r}
+pop_grid_lau_countries <- 
+  
+  purrr::map_dfr(
+    .x = 2011:2020,
+    .f = function(current_lau_year) {
+      purrr::map_dfr(
+        .x = available_pop_grid_years,
+        .f = function(current_pop_grid_year) {
+          dplyr::semi_join(x = get_pop_grid_countries(current_pop_grid_year, db),
+                           y = get_lau_countries(current_lau_year, db),
+                           by = "country") %>% 
+            dplyr::arrange(country) %>% 
+            dplyr::add_count(name = "n") %>% 
+            dplyr::summarise(country = stringr::str_c(country, collapse = ", "),
+                             n = unique(n)) %>% 
+            dplyr::mutate(lau_year = current_lau_year, pop_grid_year = current_pop_grid_year)
+        }
+      )
+    })
+
+
+
+
+
+pop_grid_lau_countries
+
+#pop_grid_lau_countries <- c("LU", "CY", "MK", "IS", "RS")
+
+pop_grid_lau_countries %>% 
+  dplyr::select(lau_year, pop_grid_year, n, country) %>% 
+  dplyr::arrange(lau_year, pop_grid_year) %>% 
+  knitr::kable()
+```
+
+## Availability of LAU/NUTS concordance tables
+
+See [source for details](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units)
+
+Notice that the concordance tables present many inconsistencies and do not fully match the LAU dataset distributed for the correspondent dataset. See [this page](lau_nuts_botched.html) for some attempts at using the correspondence tables, and [this other page](lau_nuts.html) for an alternative solution that offers consistent matching based on available data. Consider that full correspondence between LAU and NUTS may be tricky, as changing of LAU boundaries along NUTS boundary may cause some former municipalities to be moved from a NUTS to the other.

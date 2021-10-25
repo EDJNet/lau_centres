@@ -1,0 +1,124 @@
+---
+title: "Population-weighted centres of local administrative units (LAU) in Europe"
+description: |
+  If you need the coordinates of a location, where do you put the centre?
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+
+__N.B. This is a work in progress. Ensure that the data provided are fit for purpose.__
+
+This repository presents datasets of the population-weighted centres of local administrative units in Europe, the scripts used to generate them with different approaches, as well as details on quality checks and peculiarities of the data.
+
+It also tries to facilitate matching a given local administrative unit to their [correspondent NUTS region](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units).
+
+## Motivation
+
+- when showing data points of a local adminsitrative unit (or other territorial boundaries) we often need a specific point on a map to show relevant information. Where should that point fall?
+- when taking values from a data grid it is often useful to have a specific set of coordinates: which should that be for local administrative units?
+- the LAU/NUTS concordance table distributed by Gisco have inconsistencies, making it a pain to adequately combine data (somewhat puzzingly, each year something else is missing or does not quite match)
+
+In reference to population-weighted centres, check out the following blog post for context:
+
+[How to find the population-weighted centre of local administrative units](https://medium.com/european-data-journalism-network/how-to-find-the-population-weighted-centre-of-local-administrative-units-a0d198fc91f7)
+
+
+## Preliminary notes on terminology and data
+
+- LAU stands for "local administrative unit" and usually coincides with municipalities
+- NUTS stands for "nomenclature of territorial units for statistics"; there are NUTS of different levels, including NUTS 3 (mostly province/district/county or equivalent), NUTS 2 (larger regions), NUTS 1 (macro-regions). 
+
+See the [relevant Wikipedia page for details](https://en.wikipedia.org/wiki/Nomenclature_of_Territorial_Units_for_Statistics).
+
+Eurostat releases every year an updated datasets with LAUs, including basic statistics about each of them as well as the spatial boundaries in formats that can be read by a number of software packages. The same is true for NUTS, with the exception that they are not updated yearly: recent years of release of NUTS regions include 2021, 2016, and 2013.
+
+Besides, the coverage of these datasets is not the same across all years, as some countries were not part of the NUTS system earlier on.
+
+
+This discrepancy in release dates means that, as LAUs are merged or change their boundaries, sometimes across different NUTS regions, there may not be perfect concordance between, for example, LAU for 2019 and NUTS for 2016. Eurostat does distribute concordance table, but these are not perfectly consistent (some LAUs are missing for some countries, some countries are missing, etc.).
+
+
+This forces users of these data to make a judgement call: should they use old data? should they manually find where the LAUs missing in the concordance tables are located? Should they mix and match?
+
+This repository outlines some possible solutions and provides consistently pre-processed data. The user should still be mindful of the structural imperfection of the results.
+
+
+## Steps and intermediate datasets
+
+Since fully consistent concordance tables between LAU and NUTS published by the EU are not available for most years, a first step in the data processing involves situating each LAU in a NUTS region. This is achieved by calculating the overlap between the relevant geometries. 
+
+This process results in three sets of datasets:
+
+- one with the overlap of each LAU in a given year, with the NUTS of a given year (this can be useful, for example, for quality checks or for caching data when processing in bulk)
+- one with full concordance between LAU and NUTS, where each LAU it is attributed to the LAU where it has most of its surface (N.B. the resulting dataset may not be fully consistent with official statistics as the possibility that a tiny number of LAUs may be misattributed to a neighbouring NUTS cannot be excluded)
+- a third and probably most useful dataset based on official concordance table, falling back to the above solution when concordance tables are incomplete, is finally distributed
+
+
+It is finally possible to get back 
+
+
+
+
+
+
+
+
+
+
+## Data availability
+
+This repository covers local administrative units as distributed by Europen Union's [Gisco services](https://gisco-services.ec.europa.eu/distribution/v2/lau/download/), and tentatively in nieghbouring jurisdictions.
+
+The main determinants of data availability are:
+
+- inclusion of relevant country in the [LAU datasets](https://gisco-services.ec.europa.eu/distribution/v2/lau/download/) for the relevant year
+- coverage by the EU population grid [as distributed by the EU's Gisco services](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat)
+
+
+Additional sources for the population grid include [High Resolution Population Density Maps distributed by Facebook](https://data.humdata.org/organization/facebook).
+
+[GADM for administrative boundaries](https://gadm.org/).
+
+
+
+## Sources
+
+### Local Administrative Units (LAU)
+
+The original dataset of Local Administrative Units (LAU) can be downloaded from the following link:
+https://gisco-services.ec.europa.eu/distribution/v2/lau/download/
+
+LAU can be matched to NUTS via concordance tables:
+https://ec.europa.eu/eurostat/web/nuts/local-administrative-units
+
+### Population grid
+
+The population grid can be downloaded from the following link:
+https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat
+
+Details on how the population grid was generated as well as context on the reliability of the data is included in the factsheet that can be downloaded with the latest available dataset (at the time of writing), based on 2018 data and released in 2021:
+
+## Licensing
+
+© EuroGeographics for the administrative boundaries (see [full licensing details for LAUs](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units))
+
+Licensing for the population grid dataset varies depening on year and the country originally providing the data. See [the relevant page for full details](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography). 
+
+Facebook's [High Resolution Population Density Maps](https://data.humdata.org/organization/facebook) are distributed with a CC-BY license.
+
+
+The processed dataset is distributed with a CC-BY license, crediting [EDJNet](https://europeandatajournalism.eu/) and, if relevant, linking to this repository.
+
+
+
+

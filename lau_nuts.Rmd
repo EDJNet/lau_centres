@@ -1,0 +1,251 @@
+---
+title: "LAU and NUTS"
+description: |
+  Can they be friends?
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+
+library("tidyverse", quietly = TRUE)
+library("sf", quietly = TRUE)
+library("latlon2map")
+options(timeout = 60000)
+
+cache_folder <- fs::path(fs::path_home_r(),
+                         "R",
+                         "ll_data")
+
+fs::dir_create(cache_folder)
+
+ll_set_folder(path = cache_folder)
+
+nuts_year <- 2021
+lau_year <- 2020
+
+```
+
+
+
+Combining LAU and NUTS using publicly available datasets is not as straightforward as it may seem, due to small inconsistencies in the data, the [cumbersome and internally inconsistent format chosen by GISCO to distribute the concordance tables](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units), and first of all, the puzzling choice not to include reference to NUTS in the datasets with local administrative units to begin with. 
+
+There does not seem to be any combination of concordance tables that fully match with the LAU dataset for the relevant year. Mixing and matching between different years may for different countries may eventually bring us closer to the desired outcome, but may lead to some inconsistencies of its own.
+
+Find below more details about proposed viable tables that offer *full* matching with the LAU of the relevant year, i.e. 100% of the LAUs are paired to a NUTS region. 
+
+
+
+# LAU 2020 / NUTS 2021
+
+Until Gisco finally distributes a consistent dataset (hopefully LAU 2021/NUTS2021), rather than mixing and matching, we decided to calculate belonging to a NUTS region based on the most recently distributed geographic dataset: LAU 2020/NUTS 2021. This may still potentially lead to some inconsistencies for LAUs with recently changed borders along the adminsitrative boundary of some NUTS region, but, all things considered, this is expected to offer an accurate dataset, possibly bar a handful of cases.  
+
+
+```{r}
+nuts_countries_df <- ll_get_nuts_eu(year = nuts_year,
+                                 level = 3) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::distinct(CNTR_CODE) %>% 
+  dplyr::arrange(CNTR_CODE)
+
+lau_countries_df <- ll_get_lau_eu(year = lau_year) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::distinct(CNTR_CODE) %>% 
+  dplyr::arrange(CNTR_CODE) 
+
+
+countries <- dplyr::semi_join(x = nuts_countries_df,
+                 y = lau_countries_df,
+                 by = "CNTR_CODE") %>% 
+  dplyr::arrange(CNTR_CODE) 
+
+
+# dplyr::anti_join(x = lau_countries_df,
+#                  y = nuts_countries_df,
+#                  by = "CNTR_CODE")
+# 
+# dplyr::anti_join(x = nuts_countries_df,
+#                  y = lau_countries_df,
+#                  by = "CNTR_CODE")
+
+
+```
+
+
+The area covered by both datasets (LAU 2020 / NUTS 2021) includes `r nrow(countries)` countries: `r countries %>% dplyr::summarise(country = stringr::str_c(CNTR_CODE, collapse = ", "))%>% dplyr::pull(country)`. 
+
+```{r}
+# see `_process_lau_nuts_area.Rmd` for details
+
+```
+
+
+
+## How reliable is the matching?
+
+```{r}
+
+base_folder <- fs::path("lau_nuts_area",
+                        stringr::str_c(c("lau", lau_year, "nuts", nuts_year, "area"),
+                                       collapse = "_"))
+
+all_lau_nuts_area_df <- purrr::map_dfr(
+  .x = fs::dir_ls(path = base_folder),
+  .f = function(current_file) {
+    readr::read_csv(file = current_file,
+                    col_types = cols(
+                      gisco_id = col_character(),
+                      nuts_3 = col_character(),
+                      area = col_double(),
+                      area_share = col_double()
+                    )) 
+  })
+
+all_lau_nuts_best_match_df <- all_lau_nuts_area_df %>% 
+  dplyr::arrange(gisco_id, area) %>% 
+  group_by(gisco_id) %>% 
+  dplyr::slice_max(area) %>% 
+  dplyr::ungroup()
+
+```
+
+Given some inconsistencies and different resolution we expect LAUs located along a NUTS boundary line to not match exactly with NUTS. We expect a difference up to 10, perhaps 20 percent, to be likely attributable to mismatches in the geo dataset, no actual changes on the ground. 
+
+As a consequence, there are probably just a handful of cases where the matching is not perfectly accurate.
+
+Here is a full list of LAUs which, according to available datasets, do not have more than 90% of their area within a given NUTS:
+
+
+```{r}
+lau_less_than_90_df <- all_lau_nuts_best_match_df %>% 
+  dplyr::filter(area_share<0.9) %>% 
+  dplyr::arrange(dplyr::desc(area_share))
+
+lau_less_than_90_df %>% 
+  knitr::kable()
+```
+
+
+## How consistent is the matching?
+
+Do *all* LAUs have their own NUTS? Here is a complete table of LAUs that are not paired to any NUTS:
+
+```{r}
+ll_get_lau_eu(year = lau_year) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::select(gisco_id = GISCO_ID) %>% 
+  dplyr::left_join(y = all_lau_nuts_best_match_df %>% 
+                     dplyr::select(gisco_id, nuts_3),
+                   by = "gisco_id") %>% 
+  dplyr::filter(is.na(nuts_3)) %>% 
+  knitr::kable()
+
+```
+
+
+Yes. Full match. 😍
+
+## Accessing the dataset
+
+
+```{r}
+
+
+
+
+base_folder_by_geo_eu <- fs::path("lau_nuts_concordance_by_geo",
+                                  stringr::str_c(c("lau",
+                                       lau_year,
+                                       "nuts",
+                                       nuts_year,
+                                       "concordance_by_geo_eu"),
+                                     collapse = "_"))
+fs::dir_create(base_folder_by_geo_eu)
+
+lau_nuts_full_combo_file <- fs::path(base_folder_by_geo_eu, 
+                                     stringr::str_c(c("lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_by_geo_eu.csv"),
+                                           collapse = "_"))
+
+if (fs::file_exists(lau_nuts_full_combo_file)) {
+  lau_nuts_full_combo_df <- readr::read_csv(file = lau_nuts_full_combo_file)
+} else {
+  lau_nuts_full_combo_df <- ll_get_lau_eu(year = lau_year) %>% 
+  sf::st_drop_geometry() %>% 
+   dplyr::left_join(y = all_lau_nuts_best_match_df %>% 
+                     dplyr::select(GISCO_ID = gisco_id, nuts_3),
+                   by = "GISCO_ID") %>% 
+  dplyr::arrange(GISCO_ID) %>% 
+  dplyr::transmute(gisco_id = GISCO_ID, 
+                   country = CNTR_CODE, 
+                   nuts_2 = stringr::str_remove(string = nuts_3, pattern = ".{1}$"),
+                   nuts_3,
+                   lau_id = LAU_ID, 
+                   lau_name = LAU_NAME, 
+                   population = POP_2020,
+                   area_km2 = AREA_KM2,
+                   year = YEAR, 
+                   fid = FID)
+  
+  readr::write_csv(x = lau_nuts_full_combo_df,
+                   file = lau_nuts_full_combo_file)
+                   
+}
+
+
+base_folder_by_geo <- fs::path("lau_nuts_concordance_by_geo", 
+                               stringr::str_c(c("lau",
+                                       lau_year,
+                                       "nuts",
+                                       nuts_year,
+                                       "concordance_by_geo"),
+                                     collapse = "_"))
+fs::dir_create(base_folder_by_geo)
+
+
+
+
+purrr::walk(.x = lau_nuts_full_combo_df %>%
+              dplyr::distinct(country) %>%
+              dplyr::pull(country),
+            .f = function(current_country) {
+              
+              current_csv_by_geo_file <- fs::path(base_folder_by_geo,
+                            stringr::str_c(c(current_country,
+                                             "lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_by_geo.csv"),
+                                           collapse = "_"))
+
+              
+              if (fs::file_exists(current_csv_by_geo_file)==FALSE) {
+                lau_nuts_full_combo_df %>% 
+                  dplyr::filter(country == current_country) %>% 
+                  readr::write_csv(file = fs::path(current_csv_by_geo_file))
+              }
+            })
+
+
+
+
+
+```
+
+The following datasets generated with this approach are currently available:
+
+- [LAU 2020/NUTS 2021](lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo_eu/lau_2020_nuts_2021_concordance_by_geo_eu.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo)
+
+
+## Final considerations
+

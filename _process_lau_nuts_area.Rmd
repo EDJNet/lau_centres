@@ -1,0 +1,164 @@
+---
+title: "LAU and NUTS"
+description: |
+  Can they be friends?
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+params:
+  nuts_year: 2021
+  lau_year: 2020
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+
+library("tidyverse", quietly = TRUE)
+library("sf", quietly = TRUE)
+library("latlon2map")
+options(timeout = 60000)
+
+cache_folder <- fs::path(fs::path_home_r(),
+                         "R",
+                         "ll_data")
+
+fs::dir_create(cache_folder)
+
+ll_set_folder(path = cache_folder)
+
+# nuts_year <- 2021
+# lau_year <- 2020
+
+nuts_year <- params$nuts_year
+lau_year <- params$lau_year
+```
+
+
+
+```{r find lau nuts countries}
+nuts_countries_df <- ll_get_nuts_eu(year = nuts_year,
+                                 level = 3) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::distinct(CNTR_CODE) %>% 
+  dplyr::arrange(CNTR_CODE)
+
+lau_countries_df <- ll_get_lau_eu(year = lau_year) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::distinct(CNTR_CODE) %>% 
+  dplyr::arrange(CNTR_CODE) 
+
+
+countries <- dplyr::semi_join(x = nuts_countries_df,
+                 y = lau_countries_df,
+                 by = "CNTR_CODE") %>% 
+  dplyr::arrange(CNTR_CODE) 
+
+
+# dplyr::anti_join(x = lau_countries_df,
+#                  y = nuts_countries_df,
+#                  by = "CNTR_CODE")
+# 
+# dplyr::anti_join(x = nuts_countries_df,
+#                  y = lau_countries_df,
+#                  by = "CNTR_CODE")
+
+
+```
+
+
+The area covered by both datasets includes `r nrow(countries)` countries: `r countries %>% dplyr::summarise(country = stringr::str_c(CNTR_CODE, collapse = ", "))%>% dplyr::pull(country)`. 
+
+```{r calculate area}
+
+base_folder <- fs::path("lau_nuts_area", stringr::str_c(c("lau", lau_year, "nuts", nuts_year, "area"), collapse = "_"))
+fs::dir_create(base_folder)
+
+purrr::walk(
+  .x = countries$CNTR_CODE,
+  .f = function(current_country) {
+    current_csv_file <- fs::path(base_folder, 
+                                 paste0(current_country, "_lau_nuts_area.csv"))
+    
+    if (fs::file_exists(current_csv_file)) {
+      return(NULL)
+    }
+    current_country_nuts3_sf <- ll_get_nuts_eu(level = 3,
+                                               resolution = 1,
+                                               year = nuts_year,
+                                               silent = TRUE) %>%
+      dplyr::filter(CNTR_CODE == current_country) %>% 
+      dplyr::select(NUTS_ID) 
+    
+    current_country_lau_sf <- ll_get_lau_eu(year = lau_year,
+                                            silent = TRUE) %>%
+      dplyr::filter(CNTR_CODE == current_country) 
+    
+   
+    
+    message(paste("Currently processing", current_country))
+    pb <- progress::progress_bar$new(total = length(current_country_lau_sf$GISCO_ID))
+   
+    
+    if (length(unique(current_country_lau_sf$GISCO_ID))==1) {
+      return(NULL)
+    }
+    
+    current_country_lau_nuts_area_df <- purrr::map_dfr(
+      .x = current_country_lau_sf$GISCO_ID,
+      .f = function(current_gisco_id) {
+        pb$tick()
+        
+        current_lau_sf <- ll_get_lau_eu(gisco_id = current_gisco_id,
+                                        lau_sf = current_country_lau_sf,
+                                        silent = TRUE)  %>% 
+      sf::st_transform(crs = 3857)
+        
+        
+        current_nuts_3_sf <- sf::st_filter(x = current_country_nuts3_sf  %>% 
+                                             sf::st_transform(crs = 3857),
+                                           y = current_lau_sf,
+                                           .predicate = sf::st_intersects)
+        
+        # run via purrr because some intersections give result of length 0
+        area_v <- purrr::map_dbl(
+          .x = seq_along(along.with = current_nuts_3_sf$NUTS_ID),
+          .f = function(i) {
+            shared_area <- sf::st_intersection(x = current_nuts_3_sf %>%
+                                                 dplyr::slice(i) %>% 
+                                                 sf::st_geometry(),
+                                               y = current_lau_sf %>% 
+                                                 sf::st_geometry()) %>%
+              sf::st_area() %>% 
+              as.numeric()
+            
+            if (length(shared_area)==0) {
+              return(0)
+            } else {
+              shared_area
+            }
+          })
+        
+        
+        current_lau_nuts3_area_df <- tibble::tibble(gisco_id = current_gisco_id,
+                                                    nuts_3 = current_nuts_3_sf$NUTS_ID, 
+                                                    area = as.numeric(area_v)) %>% 
+          dplyr::mutate(area_share = area/sum(area)) %>% 
+          dplyr::arrange(dplyr::desc(area))
+        
+        current_lau_nuts3_area_df
+        
+      })
+    
+    readr::write_csv(x = current_country_lau_nuts_area_df,
+                     file = current_csv_file)
+    
+  })
+
+```
+
+
