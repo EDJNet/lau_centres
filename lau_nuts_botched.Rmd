@@ -1,0 +1,243 @@
+---
+title: "Botched attempts at combining LAU and NUTS"
+description: |
+  Why is this such a pain?
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library("tidyverse", quietly = TRUE)
+library("sf", quietly = TRUE)
+library("latlon2map")
+library("RSQLite") # for caching
+options(timeout = 60000)
+
+cache_folder <- fs::path(fs::path_home_r(), "R", "ll_data")
+
+fs::dir_create(cache_folder)
+
+ll_set_folder(path = cache_folder)
+
+## set db
+db <- DBI::dbConnect(
+  drv = RSQLite::SQLite(),
+  fs::path(cache_folder, "pop_weighted_centre.sqlite")
+)
+
+```
+
+
+## Requirements
+
+- a consistent dataset with a population-weighted centre for all LAU
+- all LAUs need to be paired to a NUTS region
+- to the extent that is possible, the resulting dataset should not have unexpected missing data
+
+
+This page outlines *early and unfinished* attempts to verify the full coverage of the concordance tables. Its only purpose is to illustrate how matching LAUs to NUTs is not straightforward, in spite of the fact that concordance tables exist.
+
+
+## LAU 2018
+
+Let's start from the 2018 LAU dataset [distributed by GISCO](https://gisco-services.ec.europa.eu/distribution/v2/lau/download/).
+
+```{r}
+lau_2018_df <- ll_get_lau_eu(year = 2018) %>%
+  sf::st_drop_geometry()
+
+```
+The dataset has some inconsistencies and incomplete data. 
+
+
+Looking only at mainland Europe (excluding from the map French overseas territories for clarity), we already notice that Bosnia and (as we'll see) to some extent Kosovo are not included in the dataset. 
+
+```{r}
+ll_get_nuts_eu(year = 2016, level = 0) %>% 
+  dplyr::filter(CNTR_CODE %in% unique(lau_2018_df$CNTR_CODE)) %>% 
+  ggplot() +
+  geom_sf() +
+  scale_x_continuous(limits = c(-30, 35)) +
+  scale_y_continuous(limits = c(25, NA)) +
+  theme_minimal()
+```
+
+There are however other issues.
+
+## Missing place names
+
+For some reason, a considerable number of municipalities included in the dataset do not have the name included:
+
+```{r}
+ll_get_lau_eu(year = 2018) %>% 
+    sf::st_drop_geometry() %>% 
+  dplyr::group_by(CNTR_CODE) %>% 
+  dplyr::add_count(name = "total_lau_per_country") %>% 
+  filter(is.na(LAU_NAME)) %>% 
+  dplyr::group_by(CNTR_CODE, total_lau_per_country) %>% 
+  dplyr::count(name = "missing_lau_name_per_country") %>% 
+  dplyr::ungroup() %>% 
+  dplyr::mutate(missing_share = missing_lau_name_per_country/total_lau_per_country)
+```
+
+So all LAU names are missing for Montenegro, Norway, and Kosovo. Almost half of them are missing for Slovenia. About two per cent are missing in Switzerland. 
+
+The total number of LAUs in Montenegro is suspicioulsy low, so we will have to check that as well.
+
+
+## Switzerland: missing place names
+
+```{r}
+missing_ch_df <- ll_get_lau_eu(year = 2018) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::filter(CNTR_CODE == "CH") %>% 
+  dplyr::filter(is.na(LAU_NAME))
+```
+
+
+In Switzerland there are `r nrow(missing_ch_df)` municipalities with missing name. They are apparently overwhelmingly from mountain and/or border locations.
+
+```{r}
+
+ggplot() +
+    geom_sf(data = ll_get_nuts_eu(year = 2016,
+               level = 0,
+               resolution = 1) %>% 
+  dplyr::filter(CNTR_CODE == "CH")) +
+  geom_sf(data = ll_get_lau_eu(year = 2018) %>% 
+  dplyr::filter(CNTR_CODE == "CH") %>% 
+  dplyr::filter(is.na(LAU_NAME)==FALSE), fill = "lightgreen") +
+  geom_sf(data = ll_get_lau_eu(year = 2018) %>% 
+  dplyr::filter(CNTR_CODE == "CH") %>% 
+  dplyr::filter(is.na(LAU_NAME)), fill = "pink") +
+  theme_minimal()
+```
+
+The concordance tables for 2018 are of no help. 
+
+
+```{r}
+missing_ch_df %>% 
+  dplyr::left_join(y = ll_get_lau_nuts_concordance(lau_year = 2018) %>% 
+  dplyr::filter(country == "CH") %>% 
+    dplyr::rename(GISCO_ID = gisco_id),
+  by = "GISCO_ID")
+```
+
+
+
+
+```{r}
+
+ggplot() +
+    geom_sf(data = ll_get_nuts_eu(year = 2016,
+               level = 0,
+               resolution = 1) %>% 
+  dplyr::filter(CNTR_CODE == "CH")) +
+  geom_sf(data = ll_get_lau_eu(year = 2019) %>% 
+  dplyr::filter(CNTR_CODE == "CH") %>% 
+  dplyr::filter(is.na(LAU_NAME)==FALSE), fill = "lightgreen") +
+  geom_sf(data = ll_get_lau_eu(year = 2018) %>% 
+  dplyr::filter(CNTR_CODE == "CH") %>% 
+  dplyr::filter(is.na(LAU_NAME)), fill = "pink") +
+  theme_minimal()
+```
+
+### Norway: missing place names
+
+The dataset for 2018 does not include the name of municipalities in Norway. So we have their boundaries, but not their name. Unfortunately, they are also not included in the relevant [LAU/NUTS concordance tables for 2018](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units). 
+
+```{r}
+no_2018_df <- ll_get_lau_eu(year = 2018) %>% 
+  sf::st_drop_geometry() %>% 
+  filter(CNTR_CODE=="NO") %>% 
+  dplyr::select(GISCO_ID, CNTR_CODE, LAU_ID, LAU_NAME) %>% 
+  dplyr::arrange(GISCO_ID)
+
+no_2018_df
+
+
+ll_get_lau_nuts_concordance(lau_year = 2018) %>% 
+  dplyr::filter(country=="NO")
+```
+
+
+The names are however included in the 2019 dataset. Bar for one municipality. 
+```{r}
+lau_no_with_names <- ll_get_lau_eu(year = 2018) %>% 
+  sf::st_drop_geometry() %>% 
+  filter(CNTR_CODE=="NO") %>% 
+  dplyr::select(-LAU_NAME) %>% 
+  dplyr::left_join(y = ll_get_lau_eu(year = 2019) %>% 
+                     sf::st_drop_geometry() %>% 
+                     dplyr::filter(CNTR_CODE=="NO") %>% 
+                     dplyr::select(GISCO_ID, LAU_NAME),
+                   by = "GISCO_ID")
+
+lau_no_with_names %>% 
+  dplyr::filter(is.na(LAU_NAME))
+```
+
+But we're lucky enough to find the name of that municipality in the 2017 dataset:
+
+```{r}
+lau_no_with_names$LAU_NAME[lau_no_with_names$GISCO_ID=="NO_1567"] <- 
+  ll_get_lau_eu(gisco_id = "NO_1567", year = 2017) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::pull(LAU_NAME)
+```
+
+Is there more? 
+
+...
+
+
+## LAU 2019
+
+
+Keeping the LAU for 2019 as point of reference has the advantage of being available to rely on [validated concordance tables](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units) between LAU and NUTS, not yet available for 2020 as of this writing in October 2021.
+
+Let's start from the 2019 LAU dataset [distributed by GISCO](https://gisco-services.ec.europa.eu/distribution/v2/lau/download/).
+
+```{r}
+lau_2019_df <- ll_get_lau_eu(year = 2019) %>%
+  sf::st_drop_geometry()
+
+```
+
+Looking only at mainland Europe (excluding from the map French overseas territories for clarity), we notice that part of the Western Balkans is missing (namely, Bosnia Hercegovina, Montenegro, Kosovo).
+
+```{r}
+ll_get_nuts_eu(year = 2016, level = 0) %>% 
+  dplyr::filter(CNTR_CODE %in% unique(lau_2019_df$CNTR_CODE)) %>% 
+  ggplot() +
+  geom_sf() +
+  scale_x_continuous(limits = c(-30, 35)) +
+  scale_y_continuous(limits = c(25, NA)) +
+  theme_minimal()
+```
+
+
+
+
+```{r}
+missing_df <- ll_get_lau_eu(year = 2019, silent = TRUE) %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::transmute(gisco_id = GISCO_ID) %>% 
+  dplyr::left_join(y = ll_get_lau_nuts_concordance(lau_year = 2019,
+                            nuts_year = 2016) %>% 
+                     dplyr::rename(lau_name = lau_name_national),
+                   by = "gisco_id") %>% 
+  dplyr::filter(is.na(lau_name))
+  
+```
+
+It appears that `r scales::number(nrow(missing_df))` LAUs are missing from the official concordance tables for 2019.
+
+...

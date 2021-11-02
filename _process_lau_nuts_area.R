@@ -23,7 +23,7 @@ purrr::walk(
                                      sep = "_"),
                                ".html")
     
-    current_html <- fs::path("lau_nuts_area_html", current_filename)
+    current_html <- fs::path("_lau_nuts_area_html", current_filename)
     
     if (fs::file_exists(current_html)==FALSE) {
       rmarkdown::render(input = "_process_lau_nuts_area.Rmd",
@@ -32,6 +32,6 @@ purrr::walk(
                           nuts_year = current_combo_df$nuts_year
                         ),
                         output_file = current_filename,
-                        output_dir = "lau_nuts_area_html")
+                        output_dir = "_lau_nuts_area_html")
     }
   })

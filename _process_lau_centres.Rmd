@@ -1,0 +1,403 @@
+---
+title: "Processing population-weighted centres of local administrative units (LAU) in Europe"
+description: |
+  If you need the coordinates of a city, where do you put the centre?
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+params:
+  pop_grid_year: 2018
+  lau_year: 2020
+  power_centre: 2
+  adjusted: TRUE
+  nuts_year: 2016
+output: github_document
+---
+
+## Data processing
+
+```{r setup, include=FALSE}
+# options(warn = -1) 
+
+process_pop_centre <- TRUE
+
+knitr::opts_chunk$set(echo = TRUE)
+
+library("tidyverse", quietly = TRUE)
+library("sf", quietly = TRUE)
+library("latlon2map")
+library("RSQLite") # for caching
+options(timeout = 60000)
+
+cache_folder <- fs::path(fs::path_home_r(), "R", "ll_data")
+
+fs::dir_create(cache_folder)
+
+ll_set_folder(path = cache_folder)
+
+## set db
+db <- DBI::dbConnect(
+  drv = RSQLite::SQLite(),
+  fs::path(cache_folder, "pop_weighted_centre.sqlite")
+)
+
+pop_grid_year <- params$pop_grid_year
+lau_year <- params$lau_year
+power_centre <- params$power_centre
+adjusted = params$adjusted
+nuts_year = params$nuts_year
+#nuts_year = 2021
+
+adjusted_text <- ifelse(adjusted,
+                        "adjusted_intersection",
+                        "full_intersection")
+
+source("functions.R")
+
+
+
+base_folder_by_geo_eu <- fs::path(
+  "lau_nuts_concordance_by_geo",
+  stringr::str_c(c("lau",
+                   lau_year,
+                   "nuts",
+                   nuts_year,
+                   "concordance_by_geo_eu"),
+                 collapse = "_"))
+
+
+lau_nuts_full_combo_file <- fs::path(base_folder_by_geo_eu, 
+                                     stringr::str_c(c("lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_by_geo_eu.csv"),
+                                           collapse = "_"))
+
+lau_nuts_combo_df <- readr::read_csv(lau_nuts_full_combo_file,
+                                     show_col_types = FALSE)
+
+countries <- unique(lau_nuts_combo_df$country)
+
+    
+current_csv_folder <- fs::path("lau_centres", 
+                               paste("lau",
+                                     lau_year,
+                                     "nuts",
+                                     nuts_year,
+                                     "pop",
+                                     pop_grid_year,
+                                     "p",
+                                     power_centre,
+                                     adjusted_text,
+                                     sep = "_"))
+
+fs::dir_create(current_csv_folder)
+
+```
+
+
+
+
+
+
+```{r process}
+
+
+purrr::walk(
+  .x = countries,
+  .f = function(current_country) {
+
+    current_country_csv <- fs::path(current_csv_folder,
+                                    paste0(paste(current_country,
+                                                 "lau",
+                                                 lau_year,
+                                                 "nuts",
+                                                 nuts_year,
+                                                 "pop",
+                                                 pop_grid_year,
+                                                 "p",
+                                                 power_centre,
+                                                 adjusted_text,
+                                                 sep = "_"),
+                                           ".csv"))
+    
+    current_country_lau_sf <- ll_get_lau_eu(silent = TRUE,
+                                            year = lau_year) %>% 
+      dplyr::filter(CNTR_CODE == current_country)
+    
+    if (fs::file_exists(current_country_csv)==FALSE) {
+      message(paste0("Now processing ",
+                     current_country,
+                     " (",
+                     which(countries %in% current_country),
+                     " of ",
+                     length(countries),
+                     ")"))
+      
+      
+      pop_grid_current_country <- ll_get_population_grid(year = pop_grid_year,
+                                                         match_country = current_country,
+                                                         silent = TRUE)
+      
+      nuts2_current_country <- lau_nuts_combo_df %>% 
+        dplyr::filter(country == current_country) %>% 
+        dplyr::distinct(nuts_2) %>% 
+        dplyr::pull(nuts_2)
+      
+
+      current_country_area_file_csv <- fs::path(
+        "lau_nuts_area",
+        paste("lau", lau_year, "nuts", nuts_year, "area", sep = "_"),
+        paste0(current_country, "_lau_nuts_area.csv"))
+      
+            if (fs::file_exists(current_country_area_file_csv)==FALSE) {
+              return(NULL)
+            }
+      
+      current_country_area_df <- readr::read_csv(current_country_area_file_csv, show_col_types = FALSE)
+      
+
+      
+      current_lau_nuts2_combo_df <- current_country_area_df %>% 
+        dplyr::mutate(nuts_2 = stringr::str_remove(string = nuts_3, pattern = ".{1}$")) %>% 
+        group_by(gisco_id, nuts_2) %>% 
+        dplyr::summarise(area = sum(area), .groups = "drop_last") %>% 
+        group_by(gisco_id) %>% 
+        dplyr::mutate(area_share = area/sum(area)) %>% 
+        dplyr::ungroup() %>% 
+        dplyr::filter(area>0) %>% 
+        dplyr::arrange(gisco_id, nuts_2) %>% 
+        dplyr::group_by(gisco_id) %>% 
+        dplyr::summarise(nuts_combo = paste(nuts_2, collapse = "_")) %>% 
+        dplyr::arrange(nuts_combo)
+      
+      
+      current_country_nuts_combo <- current_lau_nuts2_combo_df %>% 
+        dplyr::distinct(nuts_combo) %>% 
+        dplyr::pull(nuts_combo)
+      
+
+      pb <- progress::progress_bar$new(total = length(current_country_nuts_combo))
+      pop_centre_by_country_df <- purrr::map_dfr(
+        .x = current_country_nuts_combo,
+        .f = function(current_nuts_combo) {
+         #message(current_nuts_combo)
+          
+          pb$tick()
+          
+          current_nuts2 <- stringr::str_split(current_nuts_combo,
+                                              pattern = "_",
+                                              simplify = TRUE) %>%
+            as.character()
+          
+          
+          current_nuts2_sf <- purrr::map_dfr(current_nuts2, function(x) {
+            ll_get_nuts_eu(nuts_id = x,
+                           resolution = 1,
+                           level = 2,
+                           year = nuts_year,
+                           silent = TRUE)
+          })
+          
+          
+          
+          input_grid_sf <- ll_get_population_grid(year = pop_grid_year,
+                                                  match_sf = current_nuts2_sf,
+                                                  match_name = current_nuts_combo,
+                                                  population_grid_sf = pop_grid_current_country,
+                                                  silent = TRUE)
+          
+          
+          lau_to_process <- current_lau_nuts2_combo_df %>% 
+            dplyr::filter(nuts_combo == current_nuts_combo) %>% 
+            dplyr::pull(gisco_id)
+          
+          pop_centre_by_nuts_combo_df <- purrr::map_dfr(
+            .x =lau_to_process,
+            .f = function(current_gisco_id) {
+              
+              # message(current_gisco_id)
+              
+              current_lau_sf <- ll_get_lau_eu(gisco_id = current_gisco_id,
+                                         year = lau_year,
+                                         lau_sf = current_country_lau_sf,
+                                         silent = TRUE)
+              
+              
+              valid_lau_l <- sf::st_is_valid(current_lau_sf)
+              # this check is necessary for the rare invalid lau, 
+              # e.g. NO_4631 in LAU 2020
+              if (valid_lau_l) {
+                current_pop_grid_sf <- ll_get_population_grid(
+                  year = pop_grid_year,
+                  match_sf = current_lau_sf,
+                  match_name = stringr::str_c(current_gisco_id,"-",
+                                              "lau_", lau_year, "-",
+                                              "pop_grid_", pop_grid_year,"-",
+                                              "intersects"),
+                  population_grid_sf = input_grid_sf,
+                  join = sf::st_intersects,
+                  silent = TRUE
+                )
+              } else {
+                current_pop_grid_sf <- sf::st_filter(
+                  x = input_grid_sf %>% sf::st_transform(3857),
+                  y = current_lau_sf  %>% sf::st_transform(3857),
+                  .predicate = sf::st_intersects
+                ) %>% 
+                  sf::st_transform(4326)
+                
+              }
+              
+          
+          # for older grid datasets
+          if (is.element("CNTR_CODE", colnames(current_pop_grid_sf))) {
+            current_pop_grid_sf <- current_pop_grid_sf %>% 
+              rename(CNTR_ID = CNTR_CODE)
+          }
+          
+          # for older grid datasets
+          if (is.element("TOT_P_2018", colnames(current_pop_grid_sf))) {
+            current_pop_grid_sf <- current_pop_grid_sf %>% 
+              rename(TOT_P = TOT_P_2018)
+          }
+          
+          if (nrow(current_pop_grid_sf)>0&sum(current_pop_grid_sf$TOT_P)>0) {
+            
+            if (valid_lau_l) {
+               pop_centre_df <- ll_find_pop_centre(sf_location = current_lau_sf,
+                                                sf_population_grid = current_pop_grid_sf,
+                                                power = power_centre,
+                                                adjusted = adjusted) %>% 
+              sf::st_coordinates() %>%
+              tibble::as_tibble() %>% 
+              dplyr::transmute(
+                gisco_id = current_gisco_id,
+                longitude = as.numeric(X),
+                latitude = as.numeric(Y)
+              ) %>% 
+              dplyr::left_join(lau_nuts_combo_df, by = "gisco_id") %>% 
+              dplyr::mutate(pop_weighted = TRUE)
+            } else {
+               pop_centre_df <- ll_find_pop_centre(sf_location = current_lau_sf %>% sf::st_transform(3857),
+                                                sf_population_grid = current_pop_grid_sf  %>% sf::st_transform(3857),
+                                                power = power_centre, 
+                                                adjusted = adjusted) %>% 
+              sf::st_coordinates() %>%
+              tibble::as_tibble() %>% 
+              dplyr::transmute(
+                gisco_id = current_gisco_id,
+                longitude = as.numeric(X),
+                latitude = as.numeric(Y)
+              ) %>% 
+              dplyr::left_join(lau_nuts_combo_df, by = "gisco_id") %>% 
+              dplyr::mutate(pop_weighted = TRUE)
+            }
+           
+            
+            pop_centre_df
+          } else {
+            pop_centre_df <- sf::st_centroid(current_lau_sf) %>% 
+              sf::st_coordinates() %>%
+              tibble::as_tibble() %>% 
+              dplyr::transmute(
+                gisco_id = current_gisco_id,
+                longitude = as.numeric(X),
+                latitude = as.numeric(Y)
+              )  %>% 
+              dplyr::left_join(lau_nuts_combo_df, by = "gisco_id") %>% 
+              dplyr::mutate(pop_weighted = FALSE)
+
+            pop_centre_df
+          }
+              
+              
+            })
+          
+         
+          pop_centre_by_nuts_combo_df
+                    
+        })
+      
+      concordance_combo_df <- readr::read_csv(fs::path("lau_nuts_concordance_combo",
+               stringr::str_c(c("lau",
+                                       lau_year,
+                                       "nuts",
+                                       nuts_year,
+                                       "concordance_combo"),
+                                     collapse = "_"),
+               stringr::str_c(c(current_country,
+                                             "lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_combo.csv"),
+                                           collapse = "_")),
+               show_col_types = FALSE)
+      
+      concordance_combo_df %>% 
+        dplyr::left_join(y = pop_centre_by_country_df %>% 
+                           dplyr::arrange(gisco_id) %>% 
+                           dplyr::select(gisco_id, longitude, latitude, pop_weighted),
+                         by = "gisco_id") %>% 
+        dplyr::select(gisco_id, longitude, latitude, dplyr::everything()) %>% 
+        readr::write_csv(file = current_country_csv)
+    }
+    
+  })
+      
+   
+
+
+
+```
+
+
+
+```{r}
+eu_csv_folder <- paste0(current_csv_folder, "_eu")
+
+fs::dir_create(eu_csv_folder)
+
+eu_csv_file <- fs::path(eu_csv_folder, 
+                        paste0(paste("lau",
+                                     lau_year,
+                                     "nuts",
+                                     nuts_year,
+                                     "pop",
+                                     pop_grid_year,
+                                     "p",
+                                     power_centre,
+                                     adjusted_text,
+                                     sep = "_"),
+                               ".csv"))
+
+if (fs::file_exists(eu_csv_file)==FALSE) {
+  purrr::map_dfr(.x = fs::dir_ls(path = current_csv_folder),
+                 .f = readr::read_csv, col_types = cols(
+  gisco_id = col_character(),
+  longitude = col_double(),
+  latitude = col_double(),
+  country = col_character(),
+  nuts_2 = col_character(),
+  nuts_3 = col_character(),
+  lau_id = col_character(),
+  lau_name = col_character(),
+  population = col_double(),
+  area_km2 = col_double(),
+  year = col_double(),
+  fid = col_character(),
+  concordance = col_character(),
+  pop_weighted = col_logical()
+)) %>% 
+    dplyr::arrange(gisco_id) %>% 
+    readr::write_csv(file = eu_csv_file)
+}
+
+
+```
+

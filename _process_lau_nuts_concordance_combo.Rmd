@@ -1,0 +1,172 @@
+---
+title: "LAU and NUTS"
+description: |
+  Can they be friends?
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+params:
+  nuts_year: 2016
+  lau_year: 2020
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+
+library("tidyverse", quietly = TRUE)
+library("sf", quietly = TRUE)
+library("latlon2map")
+options(timeout = 60000)
+
+cache_folder <- fs::path(fs::path_home_r(),
+                         "R",
+                         "ll_data")
+
+fs::dir_create(cache_folder)
+
+ll_set_folder(path = cache_folder)
+
+# nuts_year <- 2016
+# lau_year <- 2020
+
+nuts_year <- params$nuts_year
+lau_year <- params$lau_year
+```
+
+
+```{r get_by_geo}
+base_folder_by_geo_eu <- fs::path("lau_nuts_concordance_by_geo",
+                                  stringr::str_c(c("lau",
+                                       lau_year,
+                                       "nuts",
+                                       nuts_year,
+                                       "concordance_by_geo_eu"),
+                                     collapse = "_"))
+
+lau_nuts_by_geo_file <- fs::path(base_folder_by_geo_eu, 
+                                     stringr::str_c(c("lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_by_geo_eu.csv"),
+                                           collapse = "_"))
+
+if (fs::file_exists(lau_nuts_full_combo_file)) {
+  lau_nuts_by_geo_df <- readr::read_csv(file = lau_nuts_full_file)
+  process_further <- TRUE
+} else {
+  process_further <- FALSE
+}
+
+```
+
+
+```{r get_official_concordance, eval=process_further}
+
+lau_nuts_concordance_official_df <- ll_get_lau_nuts_concordance(lau_year = lau_year,
+                                                                nuts_year = nuts_year)
+
+
+lau_nuts_concordance_official_df
+```
+```{r lau_nuts_matching, eval=process_further}
+
+lau_nuts_matched_df <- lau_nuts_by_geo_df %>% 
+  dplyr::left_join(y = lau_nuts_concordance_official_df %>% 
+                     dplyr::select(gisco_id, nuts_3_official = nuts_3),
+                   by = "gisco_id") %>% 
+  dplyr::filter(is.na(nuts_3_official)==FALSE) %>% 
+  dplyr::mutate(nuts_3 = nuts_3_official) %>% 
+  dplyr::mutate(nuts_2 = stringr::str_remove(string = nuts_3, pattern = ".{1}$")) %>% 
+  dplyr::mutate(concordance = "official")
+
+
+
+
+lau_nuts_non_matched_df <- lau_nuts_by_geo_df %>% 
+  dplyr::left_join(y = lau_nuts_concordance_official_df %>% 
+                     dplyr::select(gisco_id, nuts_3_official = nuts_3),
+                   by = "gisco_id") %>% 
+  dplyr::filter(is.na(nuts_3_official)==TRUE) %>% 
+  dplyr::mutate(concordance = "geo")
+
+lau_nuts_combo_df <- dplyr::bind_rows(lau_nuts_matched_df, 
+                                      lau_nuts_non_matched_df) %>% 
+  dplyr::select(-nuts_3_official) %>% 
+  dplyr::arrange(gisco_id)
+
+
+
+eu_folder <- fs::path("lau_nuts_concordance_combo", 
+                               stringr::str_c(c("lau",
+                                       lau_year,
+                                       "nuts",
+                                       nuts_year,
+                                       "concordance_combo_eu"),
+                                     collapse = "_"))
+
+fs::dir_create(path = eu_folder)
+
+eu_file <- fs::path(eu_folder, 
+                    paste0( stringr::str_c(c("lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_combo_eu"),
+                                           collapse = "_"), ".csv"))
+
+if (fs::file_exists(eu_file)==FALSE) {
+  readr::write_csv(x = lau_nuts_combo_df, file = eu_file)
+}
+
+```
+
+
+
+```{r eval=process_further}
+
+base_folder_combo <- fs::path("lau_nuts_concordance_combo", 
+                               stringr::str_c(c("lau",
+                                       lau_year,
+                                       "nuts",
+                                       nuts_year,
+                                       "concordance_combo"),
+                                     collapse = "_"))
+fs::dir_create(base_folder_combo)
+
+
+
+
+purrr::walk(.x = lau_nuts_by_geo_df %>%
+              dplyr::distinct(country) %>%
+              dplyr::pull(country),
+            .f = function(current_country) {
+              
+              current_combo_file <- fs::path(base_folder_combo,
+                            stringr::str_c(c(current_country,
+                                             "lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_combo.csv"),
+                                           collapse = "_"))
+
+              
+              if (fs::file_exists(current_combo_file)==FALSE) {
+                lau_nuts_combo_df %>% 
+                  dplyr::filter(country == current_country) %>% 
+                  dplyr::arrange(gisco_id) %>%
+                  readr::write_csv(file = fs::path(current_combo_file))
+              }
+            })
+
+
+
+```
+
+

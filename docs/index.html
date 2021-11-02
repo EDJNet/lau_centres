@@ -2047,6 +2047,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="site_libs/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
+  <script defer data-domain="edjnet.github.io" src="https://plausible.europeandatajournalism.eu/js/plausible.js"></script>
+
   <!--/radix_placeholder_site_in_header-->
 
 
@@ -2081,6 +2083,7 @@ LAU/NUTS concordance
 <a href="lau_nuts_botched.html">Botched attempts with concordance tables</a>
 </div>
 </div>
+<a href="how_is_this_computed.html">How do you compute the centres?</a>
 <a href="quality_checks.html">Quality checks</a>
 <a href="https://github.com/EDJNet/population_weighted_centres">
 <i class="fab fa-github" aria-hidden="true"></i>
@@ -2133,11 +2136,25 @@ LAU/NUTS concordance
 <p>Since fully consistent concordance tables between LAU and NUTS published by the EU are not available for most years, a first step in the data processing involves situating each LAU in a NUTS region. This is achieved by calculating the overlap between the relevant geometries.</p>
 <p>This process results in three sets of datasets:</p>
 <ul>
-<li>one with the overlap of each LAU in a given year, with the NUTS of a given year (this can be useful, for example, for quality checks or for caching data when processing in bulk)</li>
-<li>one with full concordance between LAU and NUTS, where each LAU it is attributed to the LAU where it has most of its surface (N.B. the resulting dataset may not be fully consistent with official statistics as the possibility that a tiny number of LAUs may be misattributed to a neighbouring NUTS cannot be excluded)</li>
-<li>a third and probably most useful dataset based on official concordance table, falling back to the above solution when concordance tables are incomplete, is finally distributed</li>
+<li>one with the overlap of each LAU in a given year, with the NUTS of a given year (this can be useful, for example, for quality checks or for caching data when processing in bulk) - it is available in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_area"><code>lau_nuts_area</code> folder in this repository</a> for multiple combinations of LAU and NUTS based on data published between 2016 and 2021</li>
+<li>one with full concordance between LAU and NUTS, where each LAU is attributed to the LAU where it has most of its surface - it is available in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_by_geo"><code>lau_nuts_concordance_by_geo</code> folder in this repository</a> (N.B. the resulting dataset may not be fully consistent with official statistics as the possibility that a tiny number of LAUs may be misattributed to a neighbouring NUTS cannot be excluded)</li>
+<li>a third and probably most useful dataset based on official concordance table, falling back to the above solution when concordance tables are incomplete, is finally distributed. It includes a column calrifying if official concordance tables or matching based on geo-datasets was used. It is available in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo"><code>lau_nuts_concordance_combo</code> folder in this repository</a></li>
 </ul>
-<p>It is finally possible to get back</p>
+<p>It is finally possible to get back to the original objective of this endeavour: having a ready-made dataset with the population-weighted centres of all LAUs accross Europe. As detailed <a href="how_is_this_computed.html">in the page explaining how population-weighted centres are calculated</a>, there are various elements determining the final coordinates. At this stage, datasets with the following characteristics are available:</p>
+<ul>
+<li>LAU for all years between 2018 and 2020</li>
+<li>NUTS based on 2016 NUTS</li>
+<li>population grid based on 2018 data</li>
+<li>datasets available in separate files by country as well as for all of the EU in a single file</li>
+<li>all datasets are based on “adjusted intersection”, i.e. only a share of residents of the cells crossing the relevant administrative boundary are included, proportional to the part of the cell that falls into the given administrative unit</li>
+<li>in order to “push” the centre towards more densely populated areas, the population-weighted centre is calculated by raising to the power of two the number of residents in each cell. This seems a good solutions for most use cases; the same with other parameters can easily be calculated with the scripts included in this repository.</li>
+</ul>
+<p>All datasets are available in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_centres"><code>lau_centres</code> folder in this repository</a></p>
+<h2 id="i-just-need-a-dataset-with-lau-centres-what-should-i-download">“I just need a dataset with LAU centres, what should I download?”</h2>
+<p>The most recent, consistent, and complete dataset at this stage is probably the one based on LAU for 2020, NUTS for 2016, population-grid for 2018.</p>
+<p>It is available <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu.csv">following this link</a>.</p>
+<h2 id="future-and-forthcoming">Future and forthcoming</h2>
+<p>This dataset may be updated to include datasets based on more recent data, to add coverage for other European countries not included in Eurostat datasets, or to recalculate the population-weighted centres based on high-resolution population grids.</p>
 <h2 id="data-availability">Data availability</h2>
 <p>This repository covers local administrative units as distributed by Europen Union’s <a href="https://gisco-services.ec.europa.eu/distribution/v2/lau/download/">Gisco services</a>, and tentatively in nieghbouring jurisdictions.</p>
 <p>The main determinants of data availability are:</p>
@@ -2153,7 +2170,7 @@ LAU/NUTS concordance
 <p>LAU can be matched to NUTS via concordance tables: <a href="https://ec.europa.eu/eurostat/web/nuts/local-administrative-units" class="uri">https://ec.europa.eu/eurostat/web/nuts/local-administrative-units</a></p>
 <h3 id="population-grid">Population grid</h3>
 <p>The population grid can be downloaded from the following link: <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat" class="uri">https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat</a></p>
-<p>Details on how the population grid was generated as well as context on the reliability of the data is included in the factsheet that can be downloaded with the latest available dataset (at the time of writing), based on 2018 data and released in 2021:</p>
+<p>Details on how the population grid was generated as well as context on the reliability of the data is included in the factsheet that can be downloaded with the latest available dataset (at the time of writing), based on 2018 data and released in 2021.</p>
 <h2 id="licensing">Licensing</h2>
 <p>© EuroGeographics for the administrative boundaries (see <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units">full licensing details for LAUs</a>)</p>
 <p>Licensing for the population grid dataset varies depening on year and the country originally providing the data. See <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography">the relevant page for full details</a>.</p>

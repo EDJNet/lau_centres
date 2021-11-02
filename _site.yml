@@ -15,8 +15,13 @@ navbar:
           href: lau_nuts.html
         - text: "Botched attempts with concordance tables"
           href: lau_nuts_botched.html
+    - text: "How do you compute the centres?"
+      href: how_is_this_computed.html
     - text: "Quality checks"
       href: quality_checks.html
     - icon: fab fa-github
       href: https://github.com/EDJNet/population_weighted_centres
-output: distill::distill_article
+output:
+  distill::distill_article:
+    includes:      
+      in_header: header.html
