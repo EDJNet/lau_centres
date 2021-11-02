@@ -56,8 +56,8 @@ lau_nuts_by_geo_file <- fs::path(base_folder_by_geo_eu,
                                              "concordance_by_geo_eu.csv"),
                                            collapse = "_"))
 
-if (fs::file_exists(lau_nuts_full_combo_file)) {
-  lau_nuts_by_geo_df <- readr::read_csv(file = lau_nuts_full_combo_file)
+if (fs::file_exists(lau_nuts_by_geo_file)) {
+  lau_nuts_by_geo_df <- readr::read_csv(file = lau_nuts_by_geo_file)
   process_further <- TRUE
 } else {
   process_further <- FALSE

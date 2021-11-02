@@ -9,11 +9,11 @@ author:
     affiliation_url: https://www.europeandatajournalism.eu/
 date: "`r Sys.Date()`"
 params:
-  pop_grid_year: 2018
-  lau_year: 2018
-  power_centre: 2
-  adjusted: TRUE
-  nuts_year: 2016
+  pop_grid_year: NA
+  lau_year: NA
+  power_centre: NA
+  adjusted: NA
+  nuts_year: NA
 output: github_document
 ---
 
