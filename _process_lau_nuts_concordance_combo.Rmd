@@ -9,8 +9,8 @@ author:
     affiliation_url: https://www.europeandatajournalism.eu/
 date: "`r Sys.Date()`"
 params:
-  nuts_year: 2016
-  lau_year: 2020
+  nuts_year: NA
+  lau_year: NA
 output: github_document
 ---
 
@@ -57,7 +57,7 @@ lau_nuts_by_geo_file <- fs::path(base_folder_by_geo_eu,
                                            collapse = "_"))
 
 if (fs::file_exists(lau_nuts_full_combo_file)) {
-  lau_nuts_by_geo_df <- readr::read_csv(file = lau_nuts_full_file)
+  lau_nuts_by_geo_df <- readr::read_csv(file = lau_nuts_full_combo_file)
   process_further <- TRUE
 } else {
   process_further <- FALSE

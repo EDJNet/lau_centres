@@ -157,10 +157,7 @@ pop_grid_lau_countries <-
     })
 
 
-
-
-
-pop_grid_lau_countries
+# pop_grid_lau_countries
 
 #pop_grid_lau_countries <- c("LU", "CY", "MK", "IS", "RS")
 

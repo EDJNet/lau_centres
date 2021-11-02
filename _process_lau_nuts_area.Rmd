@@ -9,8 +9,8 @@ author:
     affiliation_url: https://www.europeandatajournalism.eu/
 date: "`r Sys.Date()`"
 params:
-  nuts_year: 2021
-  lau_year: 2020
+  nuts_year: 2016
+  lau_year: 2018
 output: github_document
 ---
 
@@ -75,14 +75,16 @@ The area covered by both datasets includes `r nrow(countries)` countries: `r cou
 
 ```{r calculate area}
 
-base_folder <- fs::path("lau_nuts_area", stringr::str_c(c("lau", lau_year, "nuts", nuts_year, "area"), collapse = "_"))
+base_folder <- fs::path("lau_nuts_area",
+                        stringr::str_c(c("lau", lau_year, "nuts", nuts_year, "area"), collapse = "_"))
 fs::dir_create(base_folder)
 
 purrr::walk(
   .x = countries$CNTR_CODE,
   .f = function(current_country) {
     current_csv_file <- fs::path(base_folder, 
-                                 paste0(current_country, "_lau_nuts_area.csv"))
+                                 paste0(current_country,
+                                        "_lau_nuts_area.csv"))
     
     if (fs::file_exists(current_csv_file)) {
       return(NULL)
@@ -101,6 +103,7 @@ purrr::walk(
    
     
     message(paste("Currently processing", current_country))
+    
     pb <- progress::progress_bar$new(total = length(current_country_lau_sf$GISCO_ID))
    
     

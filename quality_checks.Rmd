@@ -1,0 +1,263 @@
+---
+title: "Quality checks for the population-weighted centres of European LAU"
+description: |
+  Are population-weighted centres really better?
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+
+library("tidyverse", quietly = TRUE)
+library("sf", quietly = TRUE)
+library("latlon2map")
+library("RSQLite") # for caching
+library("patchwork")
+options(timeout = 60000)
+
+cache_folder <- fs::path(fs::path_home_r(),
+                         "R",
+                         "ll_data")
+
+fs::dir_create(cache_folder)
+
+ll_set_folder(path = cache_folder)
+
+## set db
+db <- DBI::dbConnect(
+  drv = RSQLite::SQLite(),
+  fs::path(cache_folder, "pop_weighted_centre.sqlite")
+)
+
+source("functions_quality_checks.R")
+# pop_grid_year <- 2011
+# lau_year <- 2018
+
+pop_grid_year <- 2018
+lau_year <- 2020
+
+power_centre <- 2
+
+set.seed(42)
+
+# lau_sf <- ll_get_lau_eu(year = 2020) 
+lau_df <- ll_get_lau_eu(year = 2020) %>%
+  sf::st_drop_geometry() 
+```
+
+## Summary statistics - LAU 2020, population grid 2018, NUTS 2016
+
+```{r}
+lau_centres_df <- readr::read_csv(file = "lau_centres/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection.csv", show_col_types = FALSE)
+
+lau_centres_sf <- lau_centres_df %>% 
+  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+
+
+lau_centres_df %>% 
+  filter(is.na(longitude))
+```
+
+
+### How many LAUs were calculated based on the population grid and how many on centroids in each country?
+
+```{r pop_weighted_vs_centroid_per_country}
+
+
+
+lau_centres_df
+```
+
+
+### How many LAU centres fall inside the administrative boundary?
+
+
+
+
+### If they fall outside of boundary, how far are they?
+
+
+
+
+
+
+## Selective checks: a tipology of local administrative units matched with a population grid
+
+There are a few main types of LAUs as far as their matching with a population grid is concerned.
+
+Some of these are not expected to present particular issues with the present method:
+
+
+- LAU with a small share of the population (or no population at all) in grid cells intersecting the boundary lines with a single major population cluster: we expect these to be least problematic and we assume these to be better than centroids
+
+
+In some other cases, the difference between this approach and simply using a centroid is likely tiny:
+
+- very small LAU with most or all of its population in grid cells intersecting the boundary lines: in such cases, the population grid won't probably be of much help, but it also cannot be very wrong. Should a centroid be used in such cases? Not much of a difference either way under most circumstances.
+
+
+There are cases where it may just be very difficult to get it right, as there may not be a good answer even if the centre was selected by a human on a case by case basis:
+
+- polycentric LAU, where the main clusters of residents are of similar size
+- oddly shaped LAU (e.g. C-shaped) with significant number of residents at the extremes
+
+
+Finally, there are two types of LAU that are likely to be most problematic:
+
+
+- LAU with a large surface, few residents in the grid cells fully inside the administrative boundary, and most or all residents in cells intersecting the administrative boundary, possibly including residents outside the boundary line. These are the ones most likely to be wrong, and are not so uncommon in mountainous or less populated areas.
+- LAU with non contiguous territories and resident population along the boundary line of at least one of them
+
+
+Overall, after manually checking results in hundreds of locations, we expect there to be potentially some issues almost exclusively in LAUs with considerable surface, low population density, and a significant share of that population along the boundary. We provide some random examples below from the relevant subset. Even in such cases, the town centre is mostly meaningful or as meaninful as can be expected in the context.
+
+## LAU with considerable surface and low population density
+
+Let's try to take municipalities with low population density. We'll take the 1% LAU with lowest population density, remove those who are unlikely to have all residents within 1km of their boundary (at the very least, those with more than 2000 residents). 
+
+```{r}
+
+lau_with_low_density_df <- lau_df %>% 
+  dplyr::filter(is.na(POP_DENS_2)==FALSE, POP_DENS_2>0) %>% 
+  dplyr::arrange(POP_DENS_2) %>% 
+  dplyr::slice_head(prop = 0.01) %>% 
+  dplyr::filter(POP_2020<2000) 
+```
+
+We'll then take these `r scales::number(nrow(lau_with_low_density_df))` municipalities, and check which of them has most residents in grid cells located along the boundary line.
+
+
+```{r}
+
+pop_grid_sf <- ll_get_population_grid(year = 2018)
+
+fs::dir_create("_quality_checks")
+
+top_pop_boundary_file <- fs::path("_quality_checks", "top_pop_boundary.csv")
+
+if (fs::file_exists(path = top_pop_boundary_file)) {
+  top_pop_boundary_df <- readr::read_csv(file = top_pop_boundary_file, show_col_types = FALSE)
+} else {
+  
+  pb <- progress::progress_bar$new(total = nrow(lau_with_low_density_df))
+  pop_distribution_boundary_df <- purrr::map_dfr(
+    .x = lau_with_low_density_df$GISCO_ID,
+    .f = function(current_gisco_id) {
+      pb$tick()
+      
+      current_lau_sf <- ll_get_lau_eu(gisco_id = current_gisco_id,
+                                      silent = TRUE)
+      
+      intersect_sf <- ll_get_population_grid(
+        year = 2018,
+        match_sf = current_lau_sf,
+        match_name = stringr::str_c(current_gisco_id,
+                                    "lau_2020",
+                                    "pop_grid_2018",
+                                    "intersects",
+                                    sep = "-"),
+        join = sf::st_intersects,
+        population_grid_sf = pop_grid_sf %>%
+          dplyr::filter(stringr::str_detect(CNTR_ID,
+                                            stringr::str_extract(current_gisco_id,
+                                                                 "[A-Z]{2}"))),
+        silent = TRUE
+      )
+      
+      
+      within_sf <- ll_get_population_grid(
+        year = 2018,
+        match_sf = current_lau_sf,
+        match_name = stringr::str_c(current_gisco_id,
+                                    "lau_2020",
+                                    "pop_grid_2018",
+                                    "within",
+                                    sep = "-"),
+        join = sf::st_within,
+        population_grid_sf = intersect_sf,
+        silent = TRUE 
+      )
+      
+      boundary_df <- dplyr::anti_join(x = intersect_sf %>% sf::st_drop_geometry(),
+                                      y = within_sf %>% sf::st_drop_geometry(),
+                                      by = "GRD_ID")
+      
+      tibble::tibble(gisco_id = current_gisco_id,
+                     intersection_cells = nrow(intersect_sf),
+                     within_cells = nrow(within_sf),
+                     boundary_cells = nrow(boundary_df),
+                     intersection_population = sum(intersect_sf$TOT_P_2018),
+                     within_population = sum(within_sf$TOT_P_2018),
+                     boundary_population = sum(boundary_df$TOT_P_2018)
+      )
+      
+    })
+  
+  top_pop_boundary_df <- pop_distribution_boundary_df %>% 
+    dplyr::filter(intersection_cells > 0, boundary_population>0) %>% 
+    dplyr::mutate(boundary_population_ratio = boundary_population/intersection_population) %>% 
+    dplyr::arrange(dplyr::desc(boundary_population_ratio))
+  
+  readr::write_csv(x = top_pop_boundary_df,
+                   file = top_pop_boundary_file)
+}
+
+```
+
+Out of the remaining `r scales::number(nrow(top_pop_boundary_df))`, we'll take a sample of 10 municipalities and plot them on a map, both showing and not showing the population grid, first using static maps, then using interactive maps for further exploration. 
+
+Based on the above considerations, the following should include some of the municipalities that the proposed approach gets most wrong.
+
+### Static maps of locations with low population density and significant share of residents located along the boundary
+
+
+
+```{r layout="l-screen-inset", message=FALSE, fig.width=14}
+
+purrr::walk(.x = top_pop_boundary_df %>% 
+              dplyr::slice_sample(n = 10) %>%
+              dplyr::pull(gisco_id),
+            .f = function(current_gisco_id) {
+                           print(
+                           custom_ll_map_pop_grid(
+                             gisco_id = current_gisco_id,
+                             pop_grid_sf = pop_grid_sf)
+                           )
+                         } )
+
+# or instead leaflet
+```
+
+
+### Dynamic maps of locations with low population density and significant share of residents located along the boundary
+
+As the difference is often tiny, and the inhabited locations involved often small, the difference may be better noticeable with interactive maps. The following map includes:
+
+- a purple sign for the centroid
+- a blue sign for the population-weighted centre
+- a green sign for the population-weighted centre, adjusted to reduce the population of cells that cross the boundary proportionally to the area that falls into the LAU
+
+The difference between the latter two is often tiny, even among these selection of edge cases (low density, relatively large share of residents in cells that cross the bounndary line).
+
+```{r message=FALSE}
+
+all_leaflet_maps_l <- purrr::map(.x = top_pop_boundary_df %>% 
+              dplyr::slice_sample(n = 10) %>%
+              dplyr::pull(gisco_id),
+            .f = function(current_gisco_id) {
+              custom_ll_map_pop_grid(
+                             gisco_id = current_gisco_id,
+                             pop_grid_sf = pop_grid_sf,
+                             use_leaflet = TRUE)
+                           
+                         } )
+
+htmltools::tagList(all_leaflet_maps_l)
+
+```
