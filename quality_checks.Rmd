@@ -46,22 +46,20 @@ power_centre <- 2
 
 set.seed(42)
 
-# lau_sf <- ll_get_lau_eu(year = 2020) 
-lau_df <- ll_get_lau_eu(year = 2020) %>%
+lau_sf <- ll_get_lau_eu(year = 2020) %>% 
+  arrange(GISCO_ID)
+lau_df <- lau_sf %>%
   sf::st_drop_geometry() 
 ```
 
 ## Summary statistics - LAU 2020, population grid 2018, NUTS 2016
 
 ```{r}
-lau_centres_df <- readr::read_csv(file = "lau_centres/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection.csv", show_col_types = FALSE)
+lau_centres_df <- readr::read_csv(file = "lau_centres/lau_2020_nuts_2016_pop_2018_p_2_adjusted_intersection.csv", show_col_types = FALSE)
 
 lau_centres_sf <- lau_centres_df %>% 
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
 
-
-lau_centres_df %>% 
-  filter(is.na(longitude))
 ```
 
 
@@ -69,22 +67,84 @@ lau_centres_df %>%
 
 ```{r pop_weighted_vs_centroid_per_country}
 
-
-
-lau_centres_df
+lau_centres_df %>% 
+  group_by(country) %>% 
+  summarise(total = n(), 
+            pop_weighted = sum(pop_weighted)) %>% 
+  mutate(pop_weighted_share = scales::percent(pop_weighted/total)) %>% 
+  knitr::kable()
 ```
+
+### How many concordance with NUTS are based on the official concordance table?
+
+```{r}
+
+lau_centres_df %>% 
+  group_by(country) %>% 
+  summarise(total = n(), 
+            concordance_official = sum(concordance=="official")) %>% 
+  mutate(concordance_official_share = scales::percent(concordance_official/total)) %>% 
+  knitr::kable()
+```
+
 
 
 ### How many LAU centres fall inside the administrative boundary?
 
 
+```{r}
+
+centres_intersect_logical <- sf::st_intersects(x = lau_centres_sf %>% sf::st_transform(crs = 3857),
+                                               y = lau_sf %>% arrange(GISCO_ID) %>% sf::st_transform(crs = 3857)) %>%
+  as.logical()
+
+lau_centres_df %>% 
+  mutate(intersects = if_else(condition = centres_intersect_logical, true = TRUE, false = FALSE, missing = FALSE)) %>% 
+  group_by(country) %>% 
+  summarise(total = n(), 
+            intersects = sum(intersects)) %>% 
+  mutate(intersects_share = scales::percent(intersects/total)) %>% 
+  knitr::kable()
+
+```
+
 
 
 ### If they fall outside of boundary, how far are they?
 
+Oddly shaped LAUs, not uncommon in coastal areas or in the mountains, may have their centroids outside of the LAU itself. The approach used to find population-weighted centres highly reduces the chance of this happening, but does not exclude it completely. The centre, however, should always be within a few hundreds meters at most from the boundary itself.
+
+```{r}
+outside_l <- which(if_else(condition = centres_intersect_logical, true = TRUE, false = FALSE, missing = FALSE)==FALSE)
+
+lau_centres_df %>% 
+  mutate(intersects = if_else(condition = centres_intersect_logical, true = TRUE, false = FALSE, missing = FALSE)) %>% 
+  filter(intersects == FALSE) %>% 
+  select(gisco_id, country, lau_name, population) %>% 
+  mutate(distance = sf::st_distance(lau_centres_sf %>% slice(outside_l), lau_sf %>% slice(outside_l), by_element = TRUE)) %>% 
+  knitr::kable()
+```
 
 
+Let's see all of these cases for municipalities at least in part covered by the population grid. As expected, they are edge cases, and the centre is actually meaningful. 
 
+```{r layout="l-screen-inset", message=FALSE}
+
+purrr::walk(.x = lau_centres_df %>% 
+              dplyr::slice(outside_l) %>%
+              filter(pop_weighted) %>% 
+              dplyr::pull(gisco_id),
+            .f = function(current_gisco_id) {
+                           print(
+                           custom_ll_map_pop_grid(
+                             gisco_id = current_gisco_id,
+                             pop_grid_sf = pop_grid_sf,
+                             use_leaflet = TRUE)
+                           )
+                         } )
+
+# or instead leaflet
+```
 
 
 ## Selective checks: a tipology of local administrative units matched with a population grid

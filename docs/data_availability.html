@@ -92,8 +92,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2021-11-02"/>
-  <meta property="article:created" itemprop="dateCreated" content="2021-11-02"/>
+  <meta property="article:published" itemprop="datePublished" content="2021-11-03"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-11-03"/>
   <meta name="article:author" content="Giorgio Comai"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["Data availability"]},{"type":"character","attributes":{},"value":["Data availability depends on sources\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-02"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["Data availability"]},{"type":"character","attributes":{},"value":["Data availability depends on sources\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-03"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2062,7 +2062,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Data availability","description":"Data availability depends on sources","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-02T00:00:00.000+01:00","citationText":"Comai, 2021"}
+{"title":"Data availability","description":"Data availability depends on sources","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-03T00:00:00.000+01:00","citationText":"Comai, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2109,7 +2109,7 @@ LAU/NUTS concordance
 <div class="d-byline">
   Giorgio Comai <a href="https://giorgiocomai.eu" class="uri">https://giorgiocomai.eu</a> (OBCT/EDJNet)<a href="https://www.europeandatajournalism.eu/" class="uri">https://www.europeandatajournalism.eu/</a>
   
-<br/>2021-11-02
+<br/>2021-11-03
 </div>
 
 <div class="d-article">
@@ -2289,20 +2289,6 @@ LAU/NUTS concordance
 </div>
 <h2 id="how-many-countries-are-present-in-both-the-lau-and-population-grid-dataset">How many countries are present in both the LAU and population grid dataset?</h2>
 <div class="layout-chunk" data-layout="l-body">
-<pre><code># A tibble: 30 × 4
-   country                                    n lau_year pop_grid_year
-   &lt;chr&gt;                                  &lt;int&gt;    &lt;int&gt;         &lt;dbl&gt;
- 1 AT, BE, BG, CH, CZ, DE, DK, EE, ES, F…    27     2011          2006
- 2 AT, BE, BG, CH, CZ, DE, DK, EE, ES, F…    26     2011          2011
- 3 AT, BE, BG, CH, CY, CZ, DE, DK, EE, E…    30     2011          2018
- 4 AT, BE, BG, CH, CZ, DE, DK, EE, EL, E…    29     2012          2006
- 5 AT, BE, BG, CH, CZ, DE, DK, EE, EL, E…    29     2012          2011
- 6 AT, BE, BG, CH, CY, CZ, DE, DK, EE, E…    34     2012          2018
- 7 AT, BE, BG, CH, CZ, DE, DK, EE, ES, F…    28     2013          2006
- 8 AT, BE, BG, CH, CZ, DE, DK, EE, ES, F…    27     2013          2011
- 9 AT, BE, BG, CH, CY, CZ, DE, DK, EE, E…    31     2013          2018
-10 AT, BE, BG, CH, CZ, DE, DK, EE, EL, E…    29     2014          2006
-# … with 20 more rows</code></pre>
 <table>
 <colgroup>
 <col style="width: 5%" />
@@ -2505,7 +2491,7 @@ LAU/NUTS concordance
 <h2 id="availability-of-launuts-concordance-tables">Availability of LAU/NUTS concordance tables</h2>
 <p>See <a href="https://ec.europa.eu/eurostat/web/nuts/local-administrative-units">source for details</a></p>
 <p>Notice that the concordance tables present many inconsistencies and do not fully match the LAU dataset distributed for the correspondent dataset. See <a href="lau_nuts_botched.html">this page</a> for some attempts at using the correspondence tables, and <a href="lau_nuts.html">this other page</a> for an alternative solution that offers consistent matching based on available data. Consider that full correspondence between LAU and NUTS may be tricky, as changing of LAU boundaries along NUTS boundary may cause some former municipalities to be moved from a NUTS to the other.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

@@ -2146,13 +2146,13 @@ LAU/NUTS concordance
 <li>NUTS based on 2016 NUTS</li>
 <li>population grid based on 2018 data</li>
 <li>datasets available in separate files by country as well as for all of the EU in a single file</li>
-<li>all datasets are based on “adjusted intersection”, i.e. only a share of residents of the cells crossing the relevant administrative boundary are included, proportional to the part of the cell that falls into the given administrative unit</li>
+<li>all datasets are based on “adjusted intersection”, i.e. only a share of residents of the cells crossing the relevant administrative boundary are included, proportional to the part of the cell that falls into the given administrative unit. This should be better than the alternative to include all residents for cells that just intersect the boundary under most circumstances, perhaps with the partial exception of coastal towns.</li>
 <li>in order to “push” the centre towards more densely populated areas, the population-weighted centre is calculated by raising to the power of two the number of residents in each cell. This seems a good solutions for most use cases; the same with other parameters can easily be calculated with the scripts included in this repository.</li>
 </ul>
 <p>All datasets are available in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_centres"><code>lau_centres</code> folder in this repository</a></p>
 <h2 id="i-just-need-a-dataset-with-lau-centres-what-should-i-download">“I just need a dataset with LAU centres, what should I download?”</h2>
 <p>The most recent, consistent, and complete dataset at this stage is probably the one based on LAU for 2020, NUTS for 2016, population-grid for 2018.</p>
-<p>It is available <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu.csv">following this link</a>.</p>
+<p>It is available <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection.csv">following this link</a>.</p>
 <h2 id="future-and-forthcoming">Future and forthcoming</h2>
 <p>This dataset may be updated to include datasets based on more recent data, to add coverage for other European countries not included in Eurostat datasets, or to recalculate the population-weighted centres based on high-resolution population grids.</p>
 <h2 id="data-availability">Data availability</h2>

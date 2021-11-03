@@ -360,11 +360,8 @@ purrr::walk(
 
 
 ```{r}
-eu_csv_folder <- paste0(current_csv_folder, "_eu")
 
-fs::dir_create(eu_csv_folder)
-
-eu_csv_file <- fs::path(eu_csv_folder, 
+eu_csv_file <- fs::path("lau_centres", 
                         paste0(paste("lau",
                                      lau_year,
                                      "nuts",

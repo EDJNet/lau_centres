@@ -1,61 +1,61 @@
 gisco_id,country,nuts_2,nuts_3,lau_id,lau_name,population,area_km2,year,fid,concordance
-LT_11,LT,LT02,LT021,11,Alytaus miesto savivaldybė,49895,39.47808077,2020,LT_11,official
-LT_12,LT,LT02,LT022,12,Birštono savivaldybė,4066,121.75734943,2020,LT_12,official
-LT_13,LT,LT01,LT011,13,Vilniaus miesto savivaldybė,561836,400.54144788,2020,LT_13,official
-LT_15,LT,LT02,LT021,15,Druskininkų savivaldybė,19122,453.3542671,2020,LT_15,official
-LT_18,LT,LT02,LT024,18,Marijampolės savivaldybė,53772,755.1208708,2020,LT_18,official
-LT_19,LT,LT02,LT022,19,Kauno miesto savivaldybė,289364,156.93881151,2020,LT_19,official
-LT_21,LT,LT02,LT023,21,Klaipėdos miesto savivaldybė,149116,88.28280593,2020,LT_21,official
-LT_23,LT,LT02,LT023,23,Neringos savivaldybė,3530,89.41296782,2020,LT_23,official
-LT_25,LT,LT02,LT023,25,Palangos miesto savivaldybė,16038,78.87774561,2020,LT_25,official
-LT_27,LT,LT02,LT025,27,Panevėžio miesto savivaldybė,85885,50.16938928,2020,LT_27,official
-LT_29,LT,LT02,LT026,29,Šiaulių miesto savivaldybė,101511,81.1181071,2020,LT_29,official
-LT_30,LT,LT02,LT029,30,Visagino savivaldybė,18243,58.0510019,2020,LT_30,official
-LT_32,LT,LT02,LT026,32,Akmenės rajono savivaldybė,18772,843.98692575,2020,LT_32,official
-LT_33,LT,LT02,LT021,33,Alytaus rajono savivaldybė,25885,1403.93912154,2020,LT_33,official
-LT_34,LT,LT02,LT029,34,Anykščių rajono savivaldybė,23038,1764.6227019,2020,LT_34,official
-LT_36,LT,LT02,LT025,36,Biržų rajono savivaldybė,22719,1476.05101938,2020,LT_36,official
-LT_38,LT,LT02,LT021,38,Varėnos rajono savivaldybė,20844,2216.86431442,2020,LT_38,official
-LT_39,LT,LT02,LT024,39,Vilkaviškio rajono savivaldybė,34666,1263.23265733,2020,LT_39,official
-LT_41,LT,LT01,LT011,41,Vilniaus rajono savivaldybė,100146,2129.45171201,2020,LT_41,official
-LT_42,LT,LT01,LT011,42,Elektrėnų savivaldybė,23984,508.87011784,2020,LT_42,official
-LT_43,LT,LT02,LT029,43,Zarasų rajono savivaldybė,14915,1331.12862931,2020,LT_43,official
-LT_45,LT,LT02,LT029,45,Ignalinos rajono savivaldybė,14430,1440.63097438,2020,LT_45,official
-LT_46,LT,LT02,LT022,46,Jonavos rajono savivaldybė,41151,943.92719573,2020,LT_46,official
-LT_47,LT,LT02,LT026,47,Joniškio rajono savivaldybė,20730,1152.08360368,2020,LT_47,official
-LT_48,LT,LT02,LT024,48,Kalvarijos savivaldybė,10187,440.32819547,2020,LT_48,official
-LT_49,LT,LT02,LT022,49,Kaišiadorių rajono savivaldybė,29526,1087.05599323,2020,LT_49,official
-LT_52,LT,LT02,LT022,52,Kauno rajono savivaldybė,96423,1496.04597199,2020,LT_52,official
-LT_53,LT,LT02,LT022,53,Kėdainių rajono savivaldybė,45275,1677.24858035,2020,LT_53,official
-LT_54,LT,LT02,LT026,54,Kelmės rajono savivaldybė,25383,1705.13154102,2020,LT_54,official
-LT_55,LT,LT02,LT023,55,Klaipėdos rajono savivaldybė,60124,1237.53890415,2020,LT_55,official
-LT_56,LT,LT02,LT023,56,Kretingos rajono savivaldybė,37425,989.04459943,2020,LT_56,official
-LT_57,LT,LT02,LT025,57,Kupiškio rajono savivaldybė,16356,1080.39750535,2020,LT_57,official
-LT_58,LT,LT02,LT024,58,Kazlų Rūdos savivaldybė,11339,554.73877054,2020,LT_58,official
-LT_59,LT,LT02,LT021,59,Lazdijų rajono savivaldybė,18324,1306.82734964,2020,LT_59,official
-LT_61,LT,LT02,LT028,61,Mažeikių rajono savivaldybė,51056,1219.49164134,2020,LT_61,official
-LT_62,LT,LT02,LT029,62,Molėtų rajono savivaldybė,17153,1367.0850067,2020,LT_62,official
-LT_63,LT,LT02,LT027,63,Pagėgių savivaldybė,7285,535.08541737,2020,LT_63,official
-LT_65,LT,LT02,LT026,65,Pakruojo rajono savivaldybė,18607,1315.6506449,2020,LT_65,official
-LT_66,LT,LT02,LT025,66,Panevėžio rajono savivaldybė,35328,2177.98433277,2020,LT_66,official
-LT_67,LT,LT02,LT025,67,Pasvalio rajono savivaldybė,22829,1289.3784879,2020,LT_67,official
-LT_68,LT,LT02,LT028,68,Plungės rajono savivaldybė,32991,1105.43169006,2020,LT_68,official
-LT_69,LT,LT02,LT022,69,Prienų rajono savivaldybė,25806,1032.98894195,2020,LT_69,official
-LT_71,LT,LT02,LT026,71,Radviliškio rajono savivaldybė,35002,1634.68630973,2020,LT_71,official
-LT_72,LT,LT02,LT022,72,Raseinių rajono savivaldybė,31230,1573.36548665,2020,LT_72,official
-LT_73,LT,LT02,LT025,73,Rokiškio rajono savivaldybė,28072,1806.67819131,2020,LT_73,official
-LT_74,LT,LT02,LT028,74,Rietavo savivaldybė,7260,585.62268256,2020,LT_74,official
-LT_75,LT,LT02,LT023,75,Skuodo rajono savivaldybė,16084,911.04110225,2020,LT_75,official
-LT_77,LT,LT02,LT027,77,Tauragės rajono savivaldybė,37803,1178.7977663,2020,LT_77,official
-LT_78,LT,LT02,LT028,78,Telšių rajono savivaldybė,39306,1438.77971698,2020,LT_78,official
-LT_79,LT,LT01,LT011,79,Trakų rajono savivaldybė,32541,1207.72945584,2020,LT_79,official
-LT_81,LT,LT01,LT011,81,Ukmergės rajono savivaldybė,33482,1395.2627257,2020,LT_81,official
-LT_82,LT,LT02,LT029,82,Utenos rajono savivaldybė,37184,1230.33815246,2020,LT_82,official
-LT_84,LT,LT02,LT024,84,Šakių rajono savivaldybė,26707,1454.17821659,2020,LT_84,official
-LT_85,LT,LT01,LT011,85,Šalčininkų rajono savivaldybė,30521,1493.14447727,2020,LT_85,official
-LT_86,LT,LT01,LT011,86,Švenčionių rajono savivaldybė,22929,1691.232262,2020,LT_86,official
-LT_87,LT,LT02,LT027,87,Šilalės rajono savivaldybė,21899,1188.17978483,2020,LT_87,official
-LT_88,LT,LT02,LT023,88,Šilutės rajono savivaldybė,37641,1425.46251875,2020,LT_88,official
-LT_89,LT,LT01,LT011,89,Širvintų rajono savivaldybė,15072,905.72885754,2020,LT_89,official
-LT_91,LT,LT02,LT026,91,Šiaulių rajono savivaldybė,41447,1807.39341259,2020,LT_91,official
-LT_94,LT,LT02,LT027,94,Jurbarko rajono savivaldybė,24835,1506.43853602,2020,LT_94,official
+LT_11,LT,LT02,LT021,11,Alytaus miesto savivaldybė,50422,39.47808092,2019,LT_11,official
+LT_12,LT,LT02,LT022,12,Birštono savivaldybė,4117,121.75734942,2019,LT_12,official
+LT_13,LT,LT01,LT011,13,Vilniaus miesto savivaldybė,552131,400.54144774,2019,LT_13,official
+LT_15,LT,LT02,LT021,15,Druskininkų savivaldybė,19360,453.3542674,2019,LT_15,official
+LT_18,LT,LT02,LT024,18,Marijampolės savivaldybė,54090,755.12087101,2019,LT_18,official
+LT_19,LT,LT02,LT022,19,Kauno miesto savivaldybė,286754,156.93881158,2019,LT_19,official
+LT_21,LT,LT02,LT023,21,Klaipėdos miesto savivaldybė,147892,88.28280592,2019,LT_21,official
+LT_23,LT,LT02,LT023,23,Neringos savivaldybė,3455,89.41296811,2019,LT_23,official
+LT_25,LT,LT02,LT023,25,Palangos miesto savivaldybė,15664,78.87774548,2019,LT_25,official
+LT_27,LT,LT02,LT025,27,Panevėžio miesto savivaldybė,87139,50.16938945,2019,LT_27,official
+LT_29,LT,LT02,LT026,29,Šiaulių miesto savivaldybė,100131,81.11810708,2019,LT_29,official
+LT_30,LT,LT02,LT029,30,Visagino savivaldybė,18414,58.05100208,2019,LT_30,official
+LT_32,LT,LT02,LT026,32,Akmenės rajono savivaldybė,19124,843.98225036,2019,LT_32,official
+LT_33,LT,LT02,LT021,33,Alytaus rajono savivaldybė,26153,1403.93912164,2019,LT_33,official
+LT_34,LT,LT02,LT029,34,Anykščių rajono savivaldybė,23602,1764.6227017,2019,LT_34,official
+LT_36,LT,LT02,LT025,36,Biržų rajono savivaldybė,23172,1476.05102004,2019,LT_36,official
+LT_38,LT,LT02,LT021,38,Varėnos rajono savivaldybė,21276,2216.86431328,2019,LT_38,official
+LT_39,LT,LT02,LT024,39,Vilkaviškio rajono savivaldybė,35316,1263.23265685,2019,LT_39,official
+LT_41,LT,LT01,LT011,41,Vilniaus rajono savivaldybė,98456,2129.45171205,2019,LT_41,official
+LT_42,LT,LT01,LT011,42,Elektrėnų savivaldybė,23687,508.87011792,2019,LT_42,official
+LT_43,LT,LT02,LT029,43,Zarasų rajono savivaldybė,15274,1299.06179143,2019,LT_43,official
+LT_45,LT,LT02,LT029,45,Ignalinos rajono savivaldybė,14868,1440.63097385,2019,LT_45,official
+LT_46,LT,LT02,LT022,46,Jonavos rajono savivaldybė,41631,943.92719571,2019,LT_46,official
+LT_47,LT,LT02,LT026,47,Joniškio rajono savivaldybė,21115,1152.08360355,2019,LT_47,official
+LT_48,LT,LT02,LT024,48,Kalvarijos savivaldybė,10438,440.32819544,2019,LT_48,official
+LT_49,LT,LT02,LT022,49,Kaišiadorių rajono savivaldybė,29904,1087.05599303,2019,LT_49,official
+LT_52,LT,LT02,LT022,52,Kauno rajono savivaldybė,95120,1459.59564075,2019,LT_52,official
+LT_53,LT,LT02,LT022,53,Kėdainių rajono savivaldybė,45871,1677.24858008,2019,LT_53,official
+LT_54,LT,LT02,LT026,54,Kelmės rajono savivaldybė,26019,1705.12484117,2019,LT_54,official
+LT_55,LT,LT02,LT023,55,Klaipėdos rajono savivaldybė,58439,1237.53890412,2019,LT_55,official
+LT_56,LT,LT02,LT023,56,Kretingos rajono savivaldybė,37575,989.0445997,2019,LT_56,official
+LT_57,LT,LT02,LT025,57,Kupiškio rajono savivaldybė,16756,1080.39750555,2019,LT_57,official
+LT_58,LT,LT02,LT024,58,Kazlų Rūdos savivaldybė,11493,554.73876989,2019,LT_58,official
+LT_59,LT,LT02,LT021,59,Lazdijų rajono savivaldybė,18695,1306.82734979,2019,LT_59,official
+LT_61,LT,LT02,LT028,61,Mažeikių rajono savivaldybė,51497,1219.49067152,2019,LT_61,official
+LT_62,LT,LT02,LT029,62,Molėtų rajono savivaldybė,17436,1367.08500668,2019,LT_62,official
+LT_63,LT,LT02,LT027,63,Pagėgių savivaldybė,7543,535.08541728,2019,LT_63,official
+LT_65,LT,LT02,LT026,65,Pakruojo rajono savivaldybė,19071,1315.66914008,2019,LT_65,official
+LT_66,LT,LT02,LT025,66,Panevėžio rajono savivaldybė,35445,2177.98433307,2019,LT_66,official
+LT_67,LT,LT02,LT025,67,Pasvalio rajono savivaldybė,23377,1289.3784871,2019,LT_67,official
+LT_68,LT,LT02,LT028,68,Plungės rajono savivaldybė,33284,1105.40581965,2019,LT_68,official
+LT_69,LT,LT02,LT022,69,Prienų rajono savivaldybė,26112,1032.98894294,2019,LT_69,official
+LT_71,LT,LT02,LT026,71,Radviliškio rajono savivaldybė,35520,1634.68631018,2019,LT_71,official
+LT_72,LT,LT02,LT022,72,Raseinių rajono savivaldybė,31921,1573.36548628,2019,LT_72,official
+LT_73,LT,LT02,LT025,73,Rokiškio rajono savivaldybė,28728,1806.6781912,2019,LT_73,official
+LT_74,LT,LT02,LT028,74,Rietavo savivaldybė,7413,585.62268233,2019,LT_74,official
+LT_75,LT,LT02,LT023,75,Skuodo rajono savivaldybė,16493,911.04110211,2019,LT_75,official
+LT_77,LT,LT02,LT027,77,Tauragės rajono savivaldybė,38290,1178.79776619,2019,LT_77,official
+LT_78,LT,LT02,LT028,78,Telšių rajono savivaldybė,39888,1438.8132573,2019,LT_78,official
+LT_79,LT,LT01,LT011,79,Trakų rajono savivaldybė,32558,1207.72945631,2019,LT_79,official
+LT_81,LT,LT01,LT011,81,Ukmergės rajono savivaldybė,33928,1395.26272564,2019,LT_81,official
+LT_82,LT,LT02,LT029,82,Utenos rajono savivaldybė,37435,1230.33815277,2019,LT_82,official
+LT_84,LT,LT02,LT024,84,Šakių rajono savivaldybė,27341,1454.17822437,2019,LT_84,official
+LT_85,LT,LT01,LT011,85,Šalčininkų rajono savivaldybė,31031,1493.14447686,2019,LT_85,official
+LT_86,LT,LT01,LT011,86,Švenčionių rajono savivaldybė,23392,1691.23226219,2019,LT_86,official
+LT_87,LT,LT02,LT027,87,Šilalės rajono savivaldybė,22410,1188.17978567,2019,LT_87,official
+LT_88,LT,LT02,LT023,88,Šilutės rajono savivaldybė,38204,1425.46251866,2019,LT_88,official
+LT_89,LT,LT01,LT011,89,Širvintų rajono savivaldybė,15355,905.72885737,2019,LT_89,official
+LT_91,LT,LT02,LT026,91,Šiaulių rajono savivaldybė,41507,1807.37959242,2019,LT_91,official
+LT_94,LT,LT02,LT027,94,Jurbarko rajono savivaldybė,25452,1506.43852844,2019,LT_94,official
