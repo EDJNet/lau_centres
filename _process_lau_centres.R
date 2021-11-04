@@ -5,7 +5,7 @@ combo_df <- fs::dir_ls("lau_nuts_area", type = "directory") %>%
   tibble::enframe(value = "folder_name", name = NULL) %>% 
   tidyr::separate(col = folder_name, into = c("lau_text","lau_year", "nuts_text", "nuts_year", "area_text")) %>% 
   dplyr::select(lau_year, nuts_year) %>% 
-  dplyr::filter(lau_year > 2017, nuts_year == 2016) %>% 
+  dplyr::filter((lau_year > 2017 & nuts_year == 2016) | (lau_year == 2020 & nuts_year == 2021)) %>% 
   dplyr::mutate(pop_grid_year = 2018, power_centre = 2, adjusted = TRUE) %>% 
   dplyr::arrange(dplyr::desc(lau_year))
   

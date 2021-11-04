@@ -7,12 +7,14 @@ navbar:
   right:
     - text: "Home"
       href: index.html
-    - text: "Data availability"
-      href: data_availability.html
+    - text: "Download the datasets"
+      href: datasets.html      
     - text: "LAU/NUTS concordance"
       menu:
         - text: "LAU and NUTS"
           href: lau_nuts.html
+        - text: "Data availability by source"
+          href: data_availability.html  
         - text: "Botched attempts with concordance tables"
           href: lau_nuts_botched.html
     - text: "How do you compute the centres?"

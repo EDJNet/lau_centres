@@ -59,14 +59,7 @@ source("functions.R")
 
 
 
-base_folder_by_geo_eu <- fs::path(
-  "lau_nuts_concordance_by_geo",
-  stringr::str_c(c("lau",
-                   lau_year,
-                   "nuts",
-                   nuts_year,
-                   "concordance_by_geo_eu"),
-                 collapse = "_"))
+base_folder_by_geo_eu <- fs::path("lau_nuts_concordance_by_geo")
 
 
 lau_nuts_full_combo_file <- fs::path(base_folder_by_geo_eu, 
@@ -74,7 +67,7 @@ lau_nuts_full_combo_file <- fs::path(base_folder_by_geo_eu,
                                              lau_year,
                                              "nuts",
                                              nuts_year,
-                                             "concordance_by_geo_eu.csv"),
+                                             "concordance_by_geo.csv"),
                                            collapse = "_"))
 
 lau_nuts_combo_df <- readr::read_csv(lau_nuts_full_combo_file,

@@ -61,14 +61,14 @@ This process results in three sets of datasets:
 
 - one with the overlap of each LAU in a given year, with the NUTS of a given year (this can be useful, for example, for quality checks or for caching data when processing in bulk) - it is available in the [`lau_nuts_area` folder in this repository](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_area) for multiple combinations of LAU and NUTS based on data published between 2016 and 2021
 - one with full concordance between LAU and NUTS, where each LAU is attributed to the LAU where it has most of its surface - it is available in the [`lau_nuts_concordance_by_geo` folder in this repository](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_by_geo) (N.B. the resulting dataset may not be fully consistent with official statistics as the possibility that a tiny number of LAUs may be misattributed to a neighbouring NUTS cannot be excluded)
-- a third and probably most useful dataset based on official concordance table, falling back to the above solution when concordance tables are incomplete, is finally distributed. It includes a column calrifying if official concordance tables or matching based on geo-datasets was used. It is available in the [`lau_nuts_concordance_combo` folder in this repository](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo)
+- a third and probably most useful dataset based on official concordance table, falling back to the above solution when concordance tables are incomplete, is finally distributed. It includes a column clarifying if the matching for the given LAU was based on official concordance tables or based on geo-datasets. It is available in the [`lau_nuts_concordance_combo` folder in this repository](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo)
 
 
 It is finally possible to get back to the original objective of this endeavour: having a ready-made dataset with the population-weighted centres of all LAUs accross Europe. As detailed [in the page explaining how population-weighted centres are calculated](how_is_this_computed.html), there are various elements determining the final coordinates. At this stage, datasets with the following characteristics are available:
 
-- LAU for all years between 2018 and 2020
-- NUTS based on 2016 NUTS
-- population grid based on 2018 data
+- LAU for all years between 2018 and 2020 based on NUTS for 2016
+- LAU for 2020 and NUTS 2021
+- all of the above are calculated based on the most recent population grid at the time of writing (with 2018 population data)
 - datasets available in separate files by country as well as for all of the EU in a single file
 - all datasets are based on "adjusted intersection", i.e. only a share of residents of the cells crossing the relevant administrative boundary are included, proportional to the part of the cell that falls into the given administrative unit. This should be better than the alternative to include all residents for cells that just intersect the boundary under most circumstances, perhaps with the partial exception of coastal towns.
 - in order to "push" the centre towards more densely populated areas, the population-weighted centre is calculated by raising to the power of two the number of residents in each cell. This seems a good solutions for most use cases; the same with other parameters can easily be calculated with the scripts included in this repository.
@@ -79,9 +79,10 @@ All datasets are available in the [`lau_centres` folder in this repository](http
 
 ## "I just need a dataset with LAU centres, what should I download?"
 
-The most recent, consistent, and complete dataset at this stage is probably the one based on LAU for 2020, NUTS for 2016, population-grid for 2018. 
+The most recent, consistent, and complete datasets are probably the following:
 
-It is available [following this link](https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection_eu/lau_2018_nuts_2016_pop_2018_p_2_adjusted_intersection.csv).
+- dataset based on LAU for 2020, NUTS for 2016, population-grid for 2018, available [following this link](https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2020_nuts_2016_pop_2018_p_2_adjusted_intersection.csv).
+- dataset based on LAU for 2020, NUTS for 2021, population-grid for 2018, available [following this link](https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv).
 
 
 ## Future and forthcoming

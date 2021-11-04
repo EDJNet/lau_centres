@@ -48,6 +48,7 @@ set.seed(42)
 
 lau_sf <- ll_get_lau_eu(year = 2020) %>% 
   arrange(GISCO_ID)
+
 lau_df <- lau_sf %>%
   sf::st_drop_geometry() 
 ```
@@ -58,7 +59,8 @@ lau_df <- lau_sf %>%
 lau_centres_df <- readr::read_csv(file = "lau_centres/lau_2020_nuts_2016_pop_2018_p_2_adjusted_intersection.csv", show_col_types = FALSE)
 
 lau_centres_sf <- lau_centres_df %>% 
-  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+  sf::st_as_sf(coords = c("longitude", "latitude"),
+               crs = 4326)
 
 ```
 

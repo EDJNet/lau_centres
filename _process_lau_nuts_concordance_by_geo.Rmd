@@ -72,13 +72,7 @@ all_lau_nuts_best_match_df <- all_lau_nuts_area_df %>%
 
 
 
-base_folder_by_geo_eu <- fs::path("lau_nuts_concordance_by_geo",
-                                  stringr::str_c(c("lau",
-                                       lau_year,
-                                       "nuts",
-                                       nuts_year,
-                                       "concordance_by_geo_eu"),
-                                     collapse = "_"))
+base_folder_by_geo_eu <- fs::path("lau_nuts_concordance_by_geo")
 fs::dir_create(base_folder_by_geo_eu)
 
 lau_nuts_full_combo_file <- fs::path(base_folder_by_geo_eu, 
@@ -86,7 +80,7 @@ lau_nuts_full_combo_file <- fs::path(base_folder_by_geo_eu,
                                              lau_year,
                                              "nuts",
                                              nuts_year,
-                                             "concordance_by_geo_eu.csv"),
+                                             "concordance_by_geo.csv"),
                                            collapse = "_"))
 
 if (fs::file_exists(lau_nuts_full_combo_file)) {

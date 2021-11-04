@@ -40,20 +40,13 @@ lau_year <- params$lau_year
 
 
 ```{r get_by_geo}
-base_folder_by_geo_eu <- fs::path("lau_nuts_concordance_by_geo",
-                                  stringr::str_c(c("lau",
-                                       lau_year,
-                                       "nuts",
-                                       nuts_year,
-                                       "concordance_by_geo_eu"),
-                                     collapse = "_"))
 
-lau_nuts_by_geo_file <- fs::path(base_folder_by_geo_eu, 
+lau_nuts_by_geo_file <- fs::path("lau_nuts_concordance_by_geo", 
                                      stringr::str_c(c("lau",
                                              lau_year,
                                              "nuts",
                                              nuts_year,
-                                             "concordance_by_geo_eu.csv"),
+                                             "concordance_by_geo.csv"),
                                            collapse = "_"))
 
 if (fs::file_exists(lau_nuts_by_geo_file)) {
@@ -102,33 +95,6 @@ lau_nuts_combo_df <- dplyr::bind_rows(lau_nuts_matched_df,
 
 
 
-eu_folder <- fs::path("lau_nuts_concordance_combo", 
-                               stringr::str_c(c("lau",
-                                       lau_year,
-                                       "nuts",
-                                       nuts_year,
-                                       "concordance_combo_eu"),
-                                     collapse = "_"))
-
-fs::dir_create(path = eu_folder)
-
-eu_file <- fs::path(eu_folder, 
-                    paste0( stringr::str_c(c("lau",
-                                             lau_year,
-                                             "nuts",
-                                             nuts_year,
-                                             "concordance_combo_eu"),
-                                           collapse = "_"), ".csv"))
-
-if (fs::file_exists(eu_file)==FALSE) {
-  readr::write_csv(x = lau_nuts_combo_df, file = eu_file)
-}
-
-```
-
-
-
-```{r eval=process_further}
 
 base_folder_combo <- fs::path("lau_nuts_concordance_combo", 
                                stringr::str_c(c("lau",
@@ -139,6 +105,25 @@ base_folder_combo <- fs::path("lau_nuts_concordance_combo",
                                      collapse = "_"))
 fs::dir_create(base_folder_combo)
 
+
+eu_file <- fs::path("lau_nuts_concordance_combo", 
+                    paste0( stringr::str_c(c("lau",
+                                             lau_year,
+                                             "nuts",
+                                             nuts_year,
+                                             "concordance_combo"),
+                                           collapse = "_"), ".csv"))
+
+if (fs::file_exists(eu_file)==FALSE) {
+  readr::write_csv(x = lau_nuts_combo_df,
+                   file = eu_file)
+}
+
+```
+
+
+
+```{r eval=process_further}
 
 
 

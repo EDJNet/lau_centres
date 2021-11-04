@@ -27,24 +27,30 @@ fs::dir_create(cache_folder)
 
 ll_set_folder(path = cache_folder)
 
-nuts_year <- 2021
-lau_year <- 2020
-
 ```
 
 
 
 Combining LAU and NUTS using publicly available datasets is not as straightforward as it may seem, due to small inconsistencies in the data, the [cumbersome and internally inconsistent format chosen by GISCO to distribute the concordance tables](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units), and first of all, the puzzling choice not to include reference to NUTS in the datasets with local administrative units to begin with. 
 
-There does not seem to be any combination of concordance tables that fully match with the LAU dataset for the relevant year. Mixing and matching between different years may for different countries may eventually bring us closer to the desired outcome, but may lead to some inconsistencies of its own.
+There does not seem to be any combination of concordance tables that fully match with the LAU dataset for the relevant year. Mixing and matching between different years for individual countries may eventually bring us closer to the desired outcome, but may lead to some inconsistencies of its own (see some details about the process in the page [botched attempts at combining LAU and NUTS](lau_nuts_botched.html))
 
 Find below more details about proposed viable tables that offer *full* matching with the LAU of the relevant year, i.e. 100% of the LAUs are paired to a NUTS region. 
 
+To be clear, the full matching inevitably leads to some artifacts: if a LAU changed its borders between 2016 and 2021 (when NUTS regions were updated), and it's geographically located across the border, there is no *right* matching. These issues involve however a relatively small number of LAUs: if your goal is to use this for data visualisations, then it's probably fine. If you are using statistics from other sources, and you expect totals to add up, then even the odd LAU out of place may be something to be concerned about (likely, part of the reason why the concordance tables are not complete).
+
+This repository includes concordance datasets [based on matching by geometry](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_by_geo), as well as a [combination](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo): based on concordance tables as distributed by Gisco, and falling back to the ones based on geometry for missing LAUs, which are probably [the ones you want to use](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo).
 
 
-# LAU 2020 / NUTS 2021
+# LAU 2020 / NUTS 2021, based on geometry
 
-Until Gisco finally distributes a consistent dataset (hopefully LAU 2021/NUTS2021), rather than mixing and matching, we decided to calculate belonging to a NUTS region based on the most recently distributed geographic dataset: LAU 2020/NUTS 2021. This may still potentially lead to some inconsistencies for LAUs with recently changed borders along the adminsitrative boundary of some NUTS region, but, all things considered, this is expected to offer an accurate dataset, possibly bar a handful of cases.  
+Until Gisco finally distributes a consistent dataset (hopefully LAU 2021/NUTS2021), we decided to calculate belonging to a NUTS region based on the most recently distributed geographic dataset: LAU 2020/NUTS 2021. This may still potentially lead to some inconsistencies for LAUs with recently changed borders along the adminsitrative boundary of some NUTS region, but, all things considered, this is expected to offer an accurate dataset, possibly bar a handful of cases.  
+
+```{r}
+nuts_year <- 2021
+lau_year <- 2020
+```
+
 
 
 ```{r}

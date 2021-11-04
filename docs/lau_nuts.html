@@ -92,8 +92,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2021-11-03"/>
-  <meta property="article:created" itemprop="dateCreated" content="2021-11-03"/>
+  <meta property="article:published" itemprop="datePublished" content="2021-11-04"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-11-04"/>
   <meta name="article:author" content="Giorgio Comai"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["LAU and NUTS"]},{"type":"character","attributes":{},"value":["Can they be friends?\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-03"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["LAU and NUTS"]},{"type":"character","attributes":{},"value":["Can they be friends?\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-04"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2062,7 +2062,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"LAU and NUTS","description":"Can they be friends?","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-03T00:00:00.000+01:00","citationText":"Comai, 2021"}
+{"title":"LAU and NUTS","description":"Can they be friends?","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-04T00:00:00.000+01:00","citationText":"Comai, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2074,7 +2074,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <div class="nav-right">
 <a href="index.html">Home</a>
-<a href="data_availability.html">Data availability</a>
+<a href="datasets.html">Download the datasets</a>
 <div class="nav-dropdown">
 <button class="nav-dropbtn">
 LAU/NUTS concordance
@@ -2083,6 +2083,7 @@ LAU/NUTS concordance
 </button>
 <div class="nav-dropdown-content">
 <a href="lau_nuts.html">LAU and NUTS</a>
+<a href="data_availability.html">Data availability by source</a>
 <a href="lau_nuts_botched.html">Botched attempts with concordance tables</a>
 </div>
 </div>
@@ -2109,15 +2110,20 @@ LAU/NUTS concordance
 <div class="d-byline">
   Giorgio Comai <a href="https://giorgiocomai.eu" class="uri">https://giorgiocomai.eu</a> (OBCT/EDJNet)<a href="https://www.europeandatajournalism.eu/" class="uri">https://www.europeandatajournalism.eu/</a>
   
-<br/>2021-11-03
+<br/>2021-11-04
 </div>
 
 <div class="d-article">
 <p>Combining LAU and NUTS using publicly available datasets is not as straightforward as it may seem, due to small inconsistencies in the data, the <a href="https://ec.europa.eu/eurostat/web/nuts/local-administrative-units">cumbersome and internally inconsistent format chosen by GISCO to distribute the concordance tables</a>, and first of all, the puzzling choice not to include reference to NUTS in the datasets with local administrative units to begin with.</p>
-<p>There does not seem to be any combination of concordance tables that fully match with the LAU dataset for the relevant year. Mixing and matching between different years may for different countries may eventually bring us closer to the desired outcome, but may lead to some inconsistencies of its own.</p>
+<p>There does not seem to be any combination of concordance tables that fully match with the LAU dataset for the relevant year. Mixing and matching between different years for individual countries may eventually bring us closer to the desired outcome, but may lead to some inconsistencies of its own (see some details about the process in the page <a href="lau_nuts_botched.html">botched attempts at combining LAU and NUTS</a>)</p>
 <p>Find below more details about proposed viable tables that offer <em>full</em> matching with the LAU of the relevant year, i.e. 100% of the LAUs are paired to a NUTS region.</p>
-<h1 id="lau-2020-nuts-2021">LAU 2020 / NUTS 2021</h1>
-<p>Until Gisco finally distributes a consistent dataset (hopefully LAU 2021/NUTS2021), rather than mixing and matching, we decided to calculate belonging to a NUTS region based on the most recently distributed geographic dataset: LAU 2020/NUTS 2021. This may still potentially lead to some inconsistencies for LAUs with recently changed borders along the adminsitrative boundary of some NUTS region, but, all things considered, this is expected to offer an accurate dataset, possibly bar a handful of cases.</p>
+<p>To be clear, the full matching inevitably leads to some artifacts: if a LAU changed its borders between 2016 and 2021 (when NUTS regions were updated), and it’s geographically located across the border, there is no <em>right</em> matching. These issues involve however a relatively small number of LAUs: if your goal is to use this for data visualisations, then it’s probably fine. If you are using statistics from other sources, and you expect totals to add up, then even the odd LAU out of place may be something to be concerned about (likely, part of the reason why the concordance tables are not complete).</p>
+<p>This repository includes concordance datasets <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_by_geo">based on matching by geometry</a>, as well as a <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo">combination</a>: based on concordance tables as distributed by Gisco, and falling back to the ones based on geometry for missing LAUs, which are probably <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo">the ones you want to use</a>.</p>
+<h1 id="lau-2020-nuts-2021-based-on-geometry">LAU 2020 / NUTS 2021, based on geometry</h1>
+<p>Until Gisco finally distributes a consistent dataset (hopefully LAU 2021/NUTS2021), we decided to calculate belonging to a NUTS region based on the most recently distributed geographic dataset: LAU 2020/NUTS 2021. This may still potentially lead to some inconsistencies for LAUs with recently changed borders along the adminsitrative boundary of some NUTS region, but, all things considered, this is expected to offer an accurate dataset, possibly bar a handful of cases.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>

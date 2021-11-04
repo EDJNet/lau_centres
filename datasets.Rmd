@@ -1,0 +1,11 @@
+---
+title: "Download the datasets"
+description: |
+  Here are all the goodies!
+author:
+  - name: Giorgio Comai 
+    url: https://giorgiocomai.eu
+    affiliation: OBCT/EDJNet
+    affiliation_url: https://www.europeandatajournalism.eu/
+date: "`r Sys.Date()`"
+---

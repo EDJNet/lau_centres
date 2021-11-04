@@ -169,6 +169,6 @@ pop_grid_lau_countries %>%
 
 ## Availability of LAU/NUTS concordance tables
 
-See [source for details](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units)
+See [Eurostat's website](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units) for details on the official concordance tables between LAUs and NUTS. 
 
-Notice that the concordance tables present many inconsistencies and do not fully match the LAU dataset distributed for the correspondent dataset. See [this page](lau_nuts_botched.html) for some attempts at using the correspondence tables, and [this other page](lau_nuts.html) for an alternative solution that offers consistent matching based on available data. Consider that full correspondence between LAU and NUTS may be tricky, as changing of LAU boundaries along NUTS boundary may cause some former municipalities to be moved from a NUTS to the other.
+Notice that the concordance tables available there present many inconsistencies and do not fully match the LAU dataset distributed for the correspondent dataset. See [this page](lau_nuts_botched.html) for some attempts at using the correspondence tables, and [this other page](lau_nuts.html) for an alternative solution that offers consistent matching based on available data.
