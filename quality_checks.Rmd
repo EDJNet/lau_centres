@@ -79,15 +79,18 @@ lau_centres_df %>%
   knitr::kable()
 ```
 
+
+
+```{r eval = FALSE}
 ### How many concordance with NUTS are based on the official concordance table?
 
-```{r}
-
+# removing, as it is largely misleading, as it compares with the provisional concordance tables
 lau_centres_df %>% 
   group_by(country) %>% 
   summarise(total = n(), 
             concordance_official = sum(concordance=="official")) %>% 
-  mutate(concordance_official_share = scales::percent(concordance_official/total)) %>% 
+  mutate(concordance_official_share = scales::percent(concordance_official/total,
+                                                      accuracy = 1)) %>% 
   knitr::kable()
 ```
 
@@ -132,22 +135,22 @@ lau_centres_df %>%
 
 Let's see all of these cases for municipalities at least in part covered by the population grid. As expected, they are edge cases, and the centre is actually meaningful. 
 
-```{r layout="l-screen-inset", message=FALSE}
+```{r centre_outside_boundary, message=FALSE}
 
-purrr::walk(.x = lau_centres_df %>% 
-              dplyr::slice(outside_l) %>%
-              filter(pop_weighted) %>% 
-              dplyr::pull(gisco_id),
-            .f = function(current_gisco_id) {
-                           print(
-                           custom_ll_map_pop_grid(
-                             gisco_id = current_gisco_id,
-                             pop_grid_sf = pop_grid_sf,
-                             use_leaflet = TRUE)
-                           )
-                         } )
+centre_outside_boundary_maps_l <- purrr::map(.x = lau_centres_df %>% 
+                                                dplyr::slice(outside_l) %>%
+                                                filter(pop_weighted) %>% 
+                                                dplyr::pull(gisco_id),
+                                              .f = function(current_gisco_id) {
+                                                
+                                                custom_ll_map_pop_grid(
+                                                  gisco_id = current_gisco_id,
+                                                  pop_grid_sf = pop_grid_sf,
+                                                  use_leaflet = TRUE)
+                                                
+                                              } )
 
-# or instead leaflet
+htmltools::tagList(centre_outside_boundary_maps_l)
 ```
 
 

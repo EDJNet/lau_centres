@@ -135,5 +135,7 @@ See below and links to the sources for more details on copyright and licensing.
 
 Licensing for the population grid dataset varies depening on year and the country originally providing the data. See [the relevant page for full details](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography). The population grid for 2018 has been created by the European Commission, Joint Research Centre (B.3) and DG REGIO (B.1); ownership: European Commission. 
 
-Beyond all of the above, if you use these data or the scripts that generate them you are encouraged, but not required, to credit [EDJNet](https://europeandatajournalism.eu/) and, if relevant, to link to this repository.
+[Correspondence tables](https://ec.europa.eu/eurostat/web/nuts/local-administrative-units) do not seem to carry additional licensing, besides what is standard to all contents distributed by Eurostat.
+
+Besides considering all of the above, if you use these data or the scripts that generate them you are encouraged, but not required, to credit [EDJNet](https://europeandatajournalism.eu/) and, if relevant, to link to this repository.
 
