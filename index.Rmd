@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-__N.B. This repository includes datasets pre-processed to facilitate common operations and full concordance with commonly used sources. Full concordance is possible only through some compromise solutions: ensure that the data provided are fit for purpose for your specific use case. Please open [an issue](https://github.com/EDJNet/lau_centres/issues) if you find problems with the data or have suggestions for improvement.__
+__N.B. This repository includes datasets pre-processed to facilitate common operations and full correspondence with commonly used sources. Full correspondence is possible only through some compromise solutions: ensure that the data provided are fit for purpose for your specific use case. Please open [an issue](https://github.com/EDJNet/lau_centres/issues) if you find problems with the data or have suggestions for improvement.__
 
 This repository presents datasets of the population-weighted centres of local administrative units in Europe, the scripts used to generate them with different approaches, as well as details on quality checks and peculiarities of the data.
 
