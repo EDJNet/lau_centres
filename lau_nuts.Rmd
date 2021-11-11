@@ -157,15 +157,95 @@ ll_get_lau_eu(year = lau_year) %>%
 
 Yes. Full match. 😍
 
+## How different is this from the official concordance tables?
+
+
+If we only consider those LAUs that are actually present in the official concordance table, how many LAUs would be miscategorised relying on the geometries as described above?
+
+In the case of LAU 2020, NUTS 2021 (with official concordance tables still provincial), only about 100 LAUs are misplaced: one in Greece, one in the Netherlands, all others in France (France has by far the highest number of LAUs of any country in Europe: more than a third of LAUs in Europe are located in France, and changes are frequent).
+
+```{r}
+
+concordance_check_df <- ll_get_lau_nuts_concordance(lau_year = 2020, nuts_year = 2021) %>% 
+  transmute(country, nuts_2_official = nuts_2, nuts_3_official = nuts_3, gisco_id) %>% 
+  dplyr::left_join(y = readr::read_csv(file = "lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo.csv", col_types = cols(
+  gisco_id = col_character(),
+  country = col_character(),
+  nuts_2 = col_character(),
+  nuts_3 = col_character(),
+  lau_id = col_character(),
+  lau_name = col_character(),
+  population = col_double(),
+  area_km2 = col_double(),
+  year = col_double(),
+  fid = col_character()
+)) %>% 
+  transmute(nuts_2_by_geo = nuts_2, nuts_3_by_geo = nuts_3, gisco_id),
+by = "gisco_id") %>% 
+  mutate(nuts_2_different = nuts_2_official != nuts_2_by_geo,
+         nuts_3_different = nuts_3_official != nuts_3_by_geo) 
+
+concordance_check_df %>% 
+  filter(is.na(nuts_2_official)==FALSE, is.na(nuts_2_by_geo)==FALSE) %>% 
+  group_by(country) %>% 
+  summarise(total_nuts_2_different = sum(nuts_2_different), 
+            total_nuts_3_different = sum(nuts_3_different), 
+            total = n()) %>% 
+  knitr::kable()
+```
+
+The situation is quite similar for LAU 2019, NUTS 2016 (the most recent for which there is a validated concordance table): the records for Albania are different only in format (the official concordance tables have e.g. "AL11" rather than "AL011"). Almost all other miscategorised are in France. .
+
+
+
+```{r}
+
+concordance_check_df <- ll_get_lau_nuts_concordance(lau_year = 2019, nuts_year = 2016) %>% 
+  transmute(country, nuts_2_official = nuts_2, nuts_3_official = nuts_3, gisco_id) %>% 
+  dplyr::left_join(y = readr::read_csv(file = "lau_nuts_concordance_by_geo/lau_2019_nuts_2016_concordance_by_geo.csv", col_types = cols(
+  gisco_id = col_character(),
+  country = col_character(),
+  nuts_2 = col_character(),
+  nuts_3 = col_character(),
+  lau_id = col_character(),
+  lau_name = col_character(),
+  population = col_double(),
+  area_km2 = col_double(),
+  year = col_double(),
+  fid = col_character()
+)) %>% 
+  transmute(nuts_2_by_geo = nuts_2, nuts_3_by_geo = nuts_3, gisco_id),
+by = "gisco_id") %>% 
+  mutate(nuts_2_different = nuts_2_official != nuts_2_by_geo,
+         nuts_3_different = nuts_3_official != nuts_3_by_geo) 
+
+concordance_check_df %>% 
+  filter(is.na(nuts_2_official)==FALSE, is.na(nuts_2_by_geo)==FALSE) %>% 
+  group_by(country) %>% 
+  summarise(total_nuts_2_different = sum(nuts_2_different), 
+            total_nuts_3_different = sum(nuts_3_different), 
+            total = n()) %>% 
+  knitr::kable()
+```
+
 ## Accessing the dataset
 
 
+The following datasets generated with this approach (i.e. attributing the LAU to the NUTS region where the largest part of its area is located according to available gemostries) are currently available. 
+
+N.B. Unless you are looking for a specific combination of LAU and NUTS, or you really want them matched by geometry, you probably want to download the [main datasets](datasets.html), using the official concordance tables, and falls back on these datases only when the relevant data is missing.
+
+- [LAU 2020/NUTS 2021](lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo)
+
+- [LAU 2020/NUTS 2016](lau_nuts_concordance_by_geo/lau_2020_nuts_2016_concordance_by_geo.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2020_nuts_2016_concordance_by_geo)
+
+- [LAU 2019/NUTS 2016](lau_nuts_concordance_by_geo/lau_2019_nuts_2016_concordance_by_geo.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2019_nuts_2016_concordance_by_geo)
+
+- [LAU 2018/NUTS 2016](lau_nuts_concordance_by_geo/lau_2018_nuts_2016_concordance_by_geo.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2018_nuts_2016_concordance_by_geo)
+
+- [LAU 2017/NUTS 2016](lau_nuts_concordance_by_geo/lau_2017_nuts_2016_concordance_by_geo.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2017_nuts_2016_concordance_by_geo)
+
+- [LAU 2016/NUTS 2016](lau_nuts_concordance_by_geo/lau_2016_nuts_2016_concordance_by_geo.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2016_nuts_2016_concordance_by_geo)
 
 
-The following datasets generated with this approach are currently available:
-
-- [LAU 2020/NUTS 2021](lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo_eu/lau_2020_nuts_2021_concordance_by_geo_eu.csv) for all of Europe, or [by country](lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo)
-
-
-## Final considerations
-
+Datasets with the surface of each LAU recorded in each NUTS are available in the [lau_nuts_area](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_area) folder. They are likely most useful for pre-caching when processing large amounts of data. 

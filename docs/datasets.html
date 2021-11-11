@@ -92,8 +92,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2021-11-04"/>
-  <meta property="article:created" itemprop="dateCreated" content="2021-11-04"/>
+  <meta property="article:published" itemprop="datePublished" content="2021-11-11"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-11-11"/>
   <meta name="article:author" content="Giorgio Comai"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["Download the datasets"]},{"type":"character","attributes":{},"value":["Here are all the goodies!\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-04"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["Download the datasets"]},{"type":"character","attributes":{},"value":["Here are all the goodies!\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-11"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2062,7 +2062,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Download the datasets","description":"Here are all the goodies!","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-04T00:00:00.000+01:00","citationText":"Comai, 2021"}
+{"title":"Download the datasets","description":"Here are all the goodies!","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-11T00:00:00.000+01:00","citationText":"Comai, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2110,10 +2110,83 @@ LAU/NUTS concordance
 <div class="d-byline">
   Giorgio Comai <a href="https://giorgiocomai.eu" class="uri">https://giorgiocomai.eu</a> (OBCT/EDJNet)<a href="https://www.europeandatajournalism.eu/" class="uri">https://www.europeandatajournalism.eu/</a>
   
-<br/>2021-11-04
+<br/>2021-11-11
 </div>
 
 <div class="d-article">
+<p>The most recent, consistent, and complete datasets are probably the following:</p>
+<ul>
+<li>dataset based on LAU for 2020, NUTS for 2016, population-grid for 2018, available <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2020_nuts_2016_pop_2018_p_2_adjusted_intersection.csv">following this link</a>.</li>
+<li>dataset based on LAU for 2020, NUTS for 2021, population-grid for 2018, available <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv">following this link</a>.</li>
+</ul>
+<p>The same files are available also <a href="https://github.com/EDJNet/lau_centres/releases">as releases on GitHub</a>, which makes it even easier to download them or include reference to them in scripts (see below). This is, for example, the direct download link for the</p>
+<p><a href="https://github.com/EDJNet/lau_centres/releases/download/lau_2020_nuts_2021_pop_grid_2018/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv" class="uri">https://github.com/EDJNet/lau_centres/releases/download/lau_2020_nuts_2021_pop_grid_2018/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv</a></p>
+<p>All files used for matching LAU and NUTS by geometry are in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_area"><code>lau_nuts_area</code></a> folder.</p>
+<p>Concordance tables based on either official concordance tables or geometry are available in this folder: <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo"><code>lau_nuts_concordance_combo</code></a> folder.</p>
+<h2 id="get-the-data-from-r">Get the data from R</h2>
+<p>You can read the dataset directly from the source, e.g. with something like:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://readr.tidyverse.org'>"readr"</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='st'>"https://github.com/EDJNet/lau_centres/releases/download/lau_2020_nuts_2021_pop_grid_2018/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>If you prefer to be explicit about column types:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='st'>"https://github.com/EDJNet/lau_centres/releases/download/lau_2020_nuts_2021_pop_grid_2018/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv"</span>,
+         col_types <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/cols.html'>cols</a></span><span class='op'>(</span>
+           gisco_id <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           longitude <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           latitude <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           country <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           nuts_2 <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           nuts_3 <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           lau_id <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           lau_name <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           population <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           area_km2 <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           year <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           fid <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           concordance <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           pop_weighted <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_logical</a></span><span class='op'>(</span><span class='op'>)</span>
+         <span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>You can also use the package <code>piggyback</code> if you want to include this in your scripts, without worrying about caching. The following will download the file only if it does not exist locally:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://docs.ropensci.org/piggyback'>"piggyback"</a></span><span class='op'>)</span>
+
+
+<span class='fu'><a href='https://docs.ropensci.org/piggyback/reference/pb_download.html'>pb_download</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='st'>"lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv"</span>,
+            repo <span class='op'>=</span> <span class='st'>"EDJNet/lau_centres"</span>,
+            tag <span class='op'>=</span> <span class='st'>"lau_2020_nuts_2021_pop_grid_2018"</span><span class='op'>)</span>
+
+
+<span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='st'>"lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv"</span>,
+         col_types <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/cols.html'>cols</a></span><span class='op'>(</span>
+           gisco_id <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           longitude <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           latitude <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           country <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           nuts_2 <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           nuts_3 <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           lau_id <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           lau_name <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           population <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           area_km2 <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           year <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_double</a></span><span class='op'>(</span><span class='op'>)</span>,
+           fid <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           concordance <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,
+           pop_weighted <span class='op'>=</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_logical</a></span><span class='op'>(</span><span class='op'>)</span>
+         <span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>You can change the year of LAU and NUTS to obtain the desired version.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

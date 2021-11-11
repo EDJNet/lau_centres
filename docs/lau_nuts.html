@@ -92,8 +92,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2021-11-04"/>
-  <meta property="article:created" itemprop="dateCreated" content="2021-11-04"/>
+  <meta property="article:published" itemprop="datePublished" content="2021-11-11"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-11-11"/>
   <meta name="article:author" content="Giorgio Comai"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["LAU and NUTS"]},{"type":"character","attributes":{},"value":["Can they be friends?\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-04"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date"]}},"value":[{"type":"character","attributes":{},"value":["LAU and NUTS"]},{"type":"character","attributes":{},"value":["Can they be friends?\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Giorgio Comai"]},{"type":"character","attributes":{},"value":["https://giorgiocomai.eu"]},{"type":"character","attributes":{},"value":["OBCT/EDJNet"]},{"type":"character","attributes":{},"value":["https://www.europeandatajournalism.eu/"]}]}]},{"type":"character","attributes":{},"value":["2021-11-11"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2062,7 +2062,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"LAU and NUTS","description":"Can they be friends?","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-04T00:00:00.000+01:00","citationText":"Comai, 2021"}
+{"title":"LAU and NUTS","description":"Can they be friends?","authors":[{"author":"Giorgio Comai","authorURL":"https://giorgiocomai.eu","affiliation":"OBCT/EDJNet","affiliationURL":"https://www.europeandatajournalism.eu/","orcidID":""}],"publishedDate":"2021-11-11T00:00:00.000+01:00","citationText":"Comai, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2110,7 +2110,7 @@ LAU/NUTS concordance
 <div class="d-byline">
   Giorgio Comai <a href="https://giorgiocomai.eu" class="uri">https://giorgiocomai.eu</a> (OBCT/EDJNet)<a href="https://www.europeandatajournalism.eu/" class="uri">https://www.europeandatajournalism.eu/</a>
   
-<br/>2021-11-04
+<br/>2021-11-11
 </div>
 
 <div class="d-article">
@@ -2269,12 +2269,398 @@ LAU/NUTS concordance
 </table>
 </div>
 <p>Yes. Full match. 😍</p>
+<h2 id="how-different-is-this-from-the-official-concordance-tables">How different is this from the official concordance tables?</h2>
+<p>If we only consider those LAUs that are actually present in the official concordance table, how many LAUs would be miscategorised relying on the geometries as described above?</p>
+<p>In the case of LAU 2020, NUTS 2021 (with official concordance tables still provincial), only about 100 LAUs are misplaced: one in Greece, one in the Netherlands, all others in France (France has by far the highest number of LAUs of any country in Europe: more than a third of LAUs in Europe are located in France, and changes are frequent).</p>
+<div class="layout-chunk" data-layout="l-body">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">country</th>
+<th style="text-align: right;">total_nuts_2_different</th>
+<th style="text-align: right;">total_nuts_3_different</th>
+<th style="text-align: right;">total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2095</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BG</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">265</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CH</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2212</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CY</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">615</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CZ</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6258</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DK</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">99</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EL</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6135</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ES</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8131</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FI</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">310</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FR</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">34967</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HU</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3155</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">105</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LI</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LU</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">102</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LV</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">119</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">68</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NL</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">355</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PL</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2477</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3092</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RO</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3181</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">290</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SI</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">212</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SK</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2927</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The situation is quite similar for LAU 2019, NUTS 2016 (the most recent for which there is a validated concordance table): the records for Albania are different only in format (the official concordance tables have e.g. “AL11” rather than “AL011”). Almost all other miscategorised are in France. .</p>
+<div class="layout-chunk" data-layout="l-body">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">country</th>
+<th style="text-align: right;">total_nuts_2_different</th>
+<th style="text-align: right;">total_nuts_3_different</th>
+<th style="text-align: right;">total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AL</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">61</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2096</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">589</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BG</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">265</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CH</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2209</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CY</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">615</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CZ</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6258</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11087</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DK</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">99</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EL</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6134</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ES</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FI</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">311</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FR</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">34970</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HR</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">556</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HU</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3155</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">105</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IS</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IT</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7910</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LI</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LU</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">102</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LV</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">119</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MK</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">68</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NL</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">355</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PL</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2478</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PT</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3092</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RO</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3181</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">290</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SI</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">212</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SK</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2927</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UK</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">400</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h2 id="accessing-the-dataset">Accessing the dataset</h2>
-<p>The following datasets generated with this approach are currently available:</p>
+<p>The following datasets generated with this approach (i.e. attributing the LAU to the NUTS region where the largest part of its area is located according to available gemostries) are currently available.</p>
+<p>N.B. Unless you are looking for a specific combination of LAU and NUTS, or you really want them matched by geometry, you probably want to download the <a href="datasets.html">main datasets</a>, using the official concordance tables, and falls back on these datases only when the relevant data is missing.</p>
 <ul>
-<li><a href="lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo_eu/lau_2020_nuts_2021_concordance_by_geo_eu.csv">LAU 2020/NUTS 2021</a> for all of Europe, or <a href="lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo">by country</a></li>
+<li><p><a href="lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo.csv">LAU 2020/NUTS 2021</a> for all of Europe, or <a href="lau_nuts_concordance_by_geo/lau_2020_nuts_2021_concordance_by_geo">by country</a></p></li>
+<li><p><a href="lau_nuts_concordance_by_geo/lau_2020_nuts_2016_concordance_by_geo.csv">LAU 2020/NUTS 2016</a> for all of Europe, or <a href="lau_nuts_concordance_by_geo/lau_2020_nuts_2016_concordance_by_geo">by country</a></p></li>
+<li><p><a href="lau_nuts_concordance_by_geo/lau_2019_nuts_2016_concordance_by_geo.csv">LAU 2019/NUTS 2016</a> for all of Europe, or <a href="lau_nuts_concordance_by_geo/lau_2019_nuts_2016_concordance_by_geo">by country</a></p></li>
+<li><p><a href="lau_nuts_concordance_by_geo/lau_2018_nuts_2016_concordance_by_geo.csv">LAU 2018/NUTS 2016</a> for all of Europe, or <a href="lau_nuts_concordance_by_geo/lau_2018_nuts_2016_concordance_by_geo">by country</a></p></li>
+<li><p><a href="lau_nuts_concordance_by_geo/lau_2017_nuts_2016_concordance_by_geo.csv">LAU 2017/NUTS 2016</a> for all of Europe, or <a href="lau_nuts_concordance_by_geo/lau_2017_nuts_2016_concordance_by_geo">by country</a></p></li>
+<li><p><a href="lau_nuts_concordance_by_geo/lau_2016_nuts_2016_concordance_by_geo.csv">LAU 2016/NUTS 2016</a> for all of Europe, or <a href="lau_nuts_concordance_by_geo/lau_2016_nuts_2016_concordance_by_geo">by country</a></p></li>
 </ul>
-<h2 id="final-considerations">Final considerations</h2>
+<p>Datasets with the surface of each LAU recorded in each NUTS are available in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_area">lau_nuts_area</a> folder. They are likely most useful for pre-caching when processing large amounts of data.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

@@ -9,3 +9,83 @@ author:
     affiliation_url: https://www.europeandatajournalism.eu/
 date: "`r Sys.Date()`"
 ---
+
+The most recent, consistent, and complete datasets are probably the following:
+
+- dataset based on LAU for 2020, NUTS for 2016, population-grid for 2018, available [following this link](https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2020_nuts_2016_pop_2018_p_2_adjusted_intersection.csv).
+- dataset based on LAU for 2020, NUTS for 2021, population-grid for 2018, available [following this link](https://github.com/EDJNet/lau_centres/tree/main/lau_centres/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv).
+
+
+The same files are available also [as releases on GitHub](https://github.com/EDJNet/lau_centres/releases), which makes it even easier to download them or include reference to them in scripts (see below). This is, for example, the direct download link for the 
+
+https://github.com/EDJNet/lau_centres/releases/download/lau_2020_nuts_2021_pop_grid_2018/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv
+
+All files used for matching LAU and NUTS by geometry are in the [`lau_nuts_area`](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_area) folder.
+
+Concordance tables based on either official concordance tables or geometry are available in this folder: [`lau_nuts_concordance_combo`](https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_concordance_combo) folder.
+
+
+## Get the data from R
+
+
+You can read the dataset directly from the source, e.g. with something like:
+
+```{r eval = FALSE}
+library("readr")
+read_csv(file = "https://github.com/EDJNet/lau_centres/releases/download/lau_2020_nuts_2021_pop_grid_2018/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv")
+```
+
+If you prefer to be explicit about column types:
+
+```{r eval = FALSE}
+read_csv(file = "https://github.com/EDJNet/lau_centres/releases/download/lau_2020_nuts_2021_pop_grid_2018/lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv",
+         col_types = cols(
+           gisco_id = col_character(),
+           longitude = col_double(),
+           latitude = col_double(),
+           country = col_character(),
+           nuts_2 = col_character(),
+           nuts_3 = col_character(),
+           lau_id = col_character(),
+           lau_name = col_character(),
+           population = col_double(),
+           area_km2 = col_double(),
+           year = col_double(),
+           fid = col_character(),
+           concordance = col_character(),
+           pop_weighted = col_logical()
+         ))
+```
+
+You can also use the package `piggyback` if you want to include this in your scripts, without worrying about caching. The following will download the file only if it does not exist locally:
+
+```{r eval = FALSE}
+library("piggyback")
+
+
+pb_download(file = "lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv",
+            repo = "EDJNet/lau_centres",
+            tag = "lau_2020_nuts_2021_pop_grid_2018")
+
+
+read_csv(file = "lau_2020_nuts_2021_pop_2018_p_2_adjusted_intersection.csv",
+         col_types = cols(
+           gisco_id = col_character(),
+           longitude = col_double(),
+           latitude = col_double(),
+           country = col_character(),
+           nuts_2 = col_character(),
+           nuts_3 = col_character(),
+           lau_id = col_character(),
+           lau_name = col_character(),
+           population = col_double(),
+           area_km2 = col_double(),
+           year = col_double(),
+           fid = col_character(),
+           concordance = col_character(),
+           pop_weighted = col_logical()
+         ))
+```
+
+
+You can change the year of LAU and NUTS to obtain the desired version. 

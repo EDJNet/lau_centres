@@ -2111,7 +2111,7 @@ LAU/NUTS concordance
 </div>
 
 <div class="d-article">
-<p><strong>N.B. This is a work in progress. Ensure that the data provided are fit for purpose.</strong></p>
+<p><strong>N.B. This repository includes datasets pre-processed to facilitate common operations and full concordance with commonly used sources. Full concordance is possible only through some compromise solutions: ensure that the data provided are fit for purpose for your specific use case. Please open <a href="https://github.com/EDJNet/lau_centres/issues">an issue</a> if you find problems with the data or have suggestions for improvement.</strong></p>
 <p>This repository presents datasets of the population-weighted centres of local administrative units in Europe, the scripts used to generate them with different approaches, as well as details on quality checks and peculiarities of the data.</p>
 <p>It also tries to facilitate matching a given local administrative unit to their <a href="https://ec.europa.eu/eurostat/web/nuts/local-administrative-units">correspondent NUTS region</a>.</p>
 <h2 id="motivation">Motivation</h2>
@@ -2122,19 +2122,20 @@ LAU/NUTS concordance
 </ul>
 <p>In reference to population-weighted centres, check out the following blog post for context:</p>
 <p><a href="https://medium.com/european-data-journalism-network/how-to-find-the-population-weighted-centre-of-local-administrative-units-a0d198fc91f7">How to find the population-weighted centre of local administrative units</a></p>
+<p>The ~30 seconds you see <a href="https://youtu.be/cAzMzIepOC8?t=189">starting with minute 3 of this video</a> show visually how this works overlaying the population grid to Google Earth imagery.</p>
 <h2 id="preliminary-notes-on-terminology-and-data">Preliminary notes on terminology and data</h2>
 <ul>
 <li>LAU stands for “local administrative unit” and usually coincides with municipalities</li>
 <li>NUTS stands for “nomenclature of territorial units for statistics”; there are NUTS of different levels, including NUTS 3 (mostly province/district/county or equivalent), NUTS 2 (larger regions), NUTS 1 (macro-regions).</li>
 </ul>
 <p>See the <a href="https://en.wikipedia.org/wiki/Nomenclature_of_Territorial_Units_for_Statistics">relevant Wikipedia page for details</a>.</p>
-<p>Eurostat releases every year an updated datasets with LAUs, including basic statistics about each of them as well as the spatial boundaries in formats that can be read by a number of software packages. The same is true for NUTS, with the exception that they are not updated yearly: recent years of release of NUTS regions include 2021, 2016, and 2013.</p>
+<p>Eurostat releases every year an updated dataset with LAUs, including basic statistics about each of them as well as the spatial boundaries in formats that can be read by a number of software packages. The same is true for NUTS, with the exception that they are not updated yearly: recent years of release of NUTS regions include 2021, 2016, and 2013.</p>
 <p>Besides, the coverage of these datasets is not the same across all years, as some countries were not part of the NUTS system earlier on.</p>
-<p>This discrepancy in release dates means that, as LAUs are merged or change their boundaries, sometimes across different NUTS regions, there may not be perfect concordance between, for example, LAU for 2019 and NUTS for 2016. Eurostat does distribute concordance table, but these are not perfectly consistent (some LAUs are missing for some countries, some countries are missing, etc.).</p>
+<p>This discrepancy in release dates means that, as LAUs are merged or change their boundaries, sometimes across different NUTS regions, there may not be perfect concordance between, for example, LAU for 2019 and NUTS for 2016. Eurostat does distribute concordance table, but these are not perfectly consistent… some LAUs are missing for some countries, some countries are missing, etc. (see this pages to see <a href="lau_nuts_botched.html">examples of how they do not match</a>)).</p>
 <p>This forces users of these data to make a judgement call: should they use old data? should they manually find where the LAUs missing in the concordance tables are located? Should they mix and match?</p>
 <p>This repository outlines some possible solutions and provides consistently pre-processed data. The user should still be mindful of the structural imperfection of the results.</p>
 <h2 id="steps-and-intermediate-datasets">Steps and intermediate datasets</h2>
-<p>Since fully consistent concordance tables between LAU and NUTS published by the EU are not available for most years, a first step in the data processing involves situating each LAU in a NUTS region. This is achieved by calculating the overlap between the relevant geometries.</p>
+<p>Since fully consistent concordance tables between LAU and NUTS published by the EU are not available for most years, a first step in the data processing involves situating each LAU in a NUTS region. This is achieved by calculating the spatial overlap between the relevant geometries.</p>
 <p>This process results in three sets of datasets:</p>
 <ul>
 <li>one with the overlap of each LAU in a given year, with the NUTS of a given year (this can be useful, for example, for quality checks or for caching data when processing in bulk) - it is available in the <a href="https://github.com/EDJNet/lau_centres/tree/main/lau_nuts_area"><code>lau_nuts_area</code> folder in this repository</a> for multiple combinations of LAU and NUTS based on data published between 2016 and 2021</li>
@@ -2175,11 +2176,12 @@ LAU/NUTS concordance
 <h3 id="population-grid">Population grid</h3>
 <p>The population grid can be downloaded from the following link: <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat" class="uri">https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat</a></p>
 <p>Details on how the population grid was generated as well as context on the reliability of the data is included in the factsheet that can be downloaded with the latest available dataset (at the time of writing), based on 2018 data and released in 2021.</p>
-<h2 id="licensing">Licensing</h2>
+<h2 id="copyright-and-licensing">Copyright and licensing</h2>
+<p>The data included in this repository are based on various datasets that come with different licensing. Geographic data are not included in this repository and should instead be downloaded from the sources, as current licensing does not allow for redistribution of geographic data nor for their use for commercial purposes (see details below). Indeed, we do not include any of the geo-spatial data provided in the original datasets, and include only standard identifiers of NUTS regions and LAUs as well as basic statistics distributed by Eurostat.</p>
+<p>See below and links to the sources for more details on copyright and licensing.</p>
 <p>© EuroGeographics for the administrative boundaries (see <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units">full licensing details for LAUs</a>)</p>
-<p>Licensing for the population grid dataset varies depening on year and the country originally providing the data. See <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography">the relevant page for full details</a>.</p>
-<p>Facebook’s <a href="https://data.humdata.org/organization/facebook">High Resolution Population Density Maps</a> are distributed with a CC-BY license.</p>
-<p>The processed dataset is distributed with a CC-BY license, crediting <a href="https://europeandatajournalism.eu/">EDJNet</a> and, if relevant, linking to this repository.</p>
+<p>Licensing for the population grid dataset varies depening on year and the country originally providing the data. See <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography">the relevant page for full details</a>. The population grid for 2018 has been created by the European Commission, Joint Research Centre (B.3) and DG REGIO (B.1); ownership: European Commission.</p>
+<p>Beyond all of the above, if you use these data or the scripts that generate them you are encouraged, but not required, to credit <a href="https://europeandatajournalism.eu/">EDJNet</a> and, if relevant, to link to this repository.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

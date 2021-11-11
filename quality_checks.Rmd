@@ -67,13 +67,15 @@ lau_centres_sf <- lau_centres_df %>%
 
 ### How many LAUs were calculated based on the population grid and how many on centroids in each country?
 
+In a small number of cases, it has not been possible to calculate the population-weighted centre, apparently because the relevant municipality did not include any resident according to the population grid (in many albeit not all instances, indeed, a grand total of zero residents is officially registered in a given LAU).
+
 ```{r pop_weighted_vs_centroid_per_country}
 
 lau_centres_df %>% 
   group_by(country) %>% 
   summarise(total = n(), 
             pop_weighted = sum(pop_weighted)) %>% 
-  mutate(pop_weighted_share = scales::percent(pop_weighted/total)) %>% 
+  mutate(pop_weighted_share = scales::percent(pop_weighted/total, accuracy = 1)) %>% 
   knitr::kable()
 ```
 
@@ -177,7 +179,7 @@ Finally, there are two types of LAU that are likely to be most problematic:
 - LAU with non contiguous territories and resident population along the boundary line of at least one of them
 
 
-Overall, after manually checking results in hundreds of locations, we expect there to be potentially some issues almost exclusively in LAUs with considerable surface, low population density, and a significant share of that population along the boundary. We provide some random examples below from the relevant subset. Even in such cases, the town centre is mostly meaningful or as meaninful as can be expected in the context.
+Overall, after manually checking results in hundreds of locations, we expect there to be potentially some issues almost exclusively in LAUs with considerable surface, low population density, and a significant share of that population along the boundary. We provide some random examples below from the relevant subset. Even in such cases, the town centre is mostly meaningful or as meaningful as can be expected in the context.
 
 ## LAU with considerable surface and low population density
 

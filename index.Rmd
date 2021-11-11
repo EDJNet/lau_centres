@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-__N.B. This is a work in progress. Ensure that the data provided are fit for purpose.__
+__N.B. This repository includes datasets pre-processed to facilitate common operations and full concordance with commonly used sources. Full concordance is possible only through some compromise solutions: ensure that the data provided are fit for purpose for your specific use case. Please open [an issue](https://github.com/EDJNet/lau_centres/issues) if you find problems with the data or have suggestions for improvement.__
 
 This repository presents datasets of the population-weighted centres of local administrative units in Europe, the scripts used to generate them with different approaches, as well as details on quality checks and peculiarities of the data.
 
@@ -32,6 +32,7 @@ In reference to population-weighted centres, check out the following blog post f
 
 [How to find the population-weighted centre of local administrative units](https://medium.com/european-data-journalism-network/how-to-find-the-population-weighted-centre-of-local-administrative-units-a0d198fc91f7)
 
+The ~30 seconds you see [starting with minute 3 of this video](https://youtu.be/cAzMzIepOC8?t=189) show visually how this works overlaying the population grid to Google Earth imagery.
 
 ## Preliminary notes on terminology and data
 
@@ -40,12 +41,12 @@ In reference to population-weighted centres, check out the following blog post f
 
 See the [relevant Wikipedia page for details](https://en.wikipedia.org/wiki/Nomenclature_of_Territorial_Units_for_Statistics).
 
-Eurostat releases every year an updated datasets with LAUs, including basic statistics about each of them as well as the spatial boundaries in formats that can be read by a number of software packages. The same is true for NUTS, with the exception that they are not updated yearly: recent years of release of NUTS regions include 2021, 2016, and 2013.
+Eurostat releases every year an updated dataset with LAUs, including basic statistics about each of them as well as the spatial boundaries in formats that can be read by a number of software packages. The same is true for NUTS, with the exception that they are not updated yearly: recent years of release of NUTS regions include 2021, 2016, and 2013.
 
 Besides, the coverage of these datasets is not the same across all years, as some countries were not part of the NUTS system earlier on.
 
 
-This discrepancy in release dates means that, as LAUs are merged or change their boundaries, sometimes across different NUTS regions, there may not be perfect concordance between, for example, LAU for 2019 and NUTS for 2016. Eurostat does distribute concordance table, but these are not perfectly consistent (some LAUs are missing for some countries, some countries are missing, etc.).
+This discrepancy in release dates means that, as LAUs are merged or change their boundaries, sometimes across different NUTS regions, there may not be perfect concordance between, for example, LAU for 2019 and NUTS for 2016. Eurostat does distribute concordance table, but these are not perfectly consistent... some LAUs are missing for some countries, some countries are missing, etc. (see this pages to see [examples of how they do not match](lau_nuts_botched.html))).
 
 
 This forces users of these data to make a judgement call: should they use old data? should they manually find where the LAUs missing in the concordance tables are located? Should they mix and match?
@@ -55,7 +56,7 @@ This repository outlines some possible solutions and provides consistently pre-p
 
 ## Steps and intermediate datasets
 
-Since fully consistent concordance tables between LAU and NUTS published by the EU are not available for most years, a first step in the data processing involves situating each LAU in a NUTS region. This is achieved by calculating the overlap between the relevant geometries. 
+Since fully consistent concordance tables between LAU and NUTS published by the EU are not available for most years, a first step in the data processing involves situating each LAU in a NUTS region. This is achieved by calculating the spatial overlap between the relevant geometries. 
 
 This process results in three sets of datasets:
 
@@ -124,17 +125,15 @@ https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distri
 
 Details on how the population grid was generated as well as context on the reliability of the data is included in the factsheet that can be downloaded with the latest available dataset (at the time of writing), based on 2018 data and released in 2021.
 
-## Licensing
+## Copyright and licensing
+
+The data included in this repository are based on various datasets that come with different licensing. Geographic data are not included in this repository and should instead be downloaded from the sources, as current licensing does not allow for redistribution of geographic data nor for their use for commercial purposes (see details below). Indeed, we do not include any of the geo-spatial data provided in the original datasets, and include only standard identifiers of NUTS regions and LAUs as well as basic statistics distributed by Eurostat.
+
+See below and links to the sources for more details on copyright and licensing. 
 
 © EuroGeographics for the administrative boundaries (see [full licensing details for LAUs](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units))
 
-Licensing for the population grid dataset varies depening on year and the country originally providing the data. See [the relevant page for full details](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography). 
+Licensing for the population grid dataset varies depening on year and the country originally providing the data. See [the relevant page for full details](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography). The population grid for 2018 has been created by the European Commission, Joint Research Centre (B.3) and DG REGIO (B.1); ownership: European Commission. 
 
-Facebook's [High Resolution Population Density Maps](https://data.humdata.org/organization/facebook) are distributed with a CC-BY license.
-
-
-The processed dataset is distributed with a CC-BY license, crediting [EDJNet](https://europeandatajournalism.eu/) and, if relevant, linking to this repository.
-
-
-
+Beyond all of the above, if you use these data or the scripts that generate them you are encouraged, but not required, to credit [EDJNet](https://europeandatajournalism.eu/) and, if relevant, to link to this repository.
 
