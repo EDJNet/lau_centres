@@ -110,7 +110,8 @@ lau_centres_df %>%
   group_by(country) %>% 
   summarise(total = n(), 
             intersects = sum(intersects)) %>% 
-  mutate(intersects_share = scales::percent(intersects/total)) %>% 
+  mutate(intersects_share = scales::percent(intersects/total,
+                                            accuracy = 1)) %>% 
   knitr::kable()
 
 ```
