@@ -22,7 +22,7 @@ navbar:
     - text: "Quality checks"
       href: quality_checks.html
     - icon: fab fa-github
-      href: https://github.com/EDJNet/population_weighted_centres
+      href: https://github.com/EDJNet/lau_centres
 output:
   distill::distill_article:
     includes:      
